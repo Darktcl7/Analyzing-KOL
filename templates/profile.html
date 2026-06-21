@@ -1,0 +1,170 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ kol.name }} - KOL Scout{% endblock %}
+
+{% block content %}
+<div class="flex-1 overflow-y-auto">
+    <div class="max-w-[1200px] mx-auto p-6 md:p-10">
+
+        <!-- Back Button -->
+        <div class="mb-6">
+            <a href="/" class="inline-flex items-center gap-2 text-[#9dabb8] hover:text-white transition-all">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                <span class="text-sm font-medium">Back to Discovery</span>
+            </a>
+        </div>
+
+        <!-- Profile Header Card -->
+        <div class="bg-surface-dark border border-[#3c4753]/30 rounded-2xl p-8 mb-8 shadow-xl">
+            <div class="flex flex-col md:flex-row gap-10 items-center md:items-start">
+
+                <!-- Profile Image -->
+                <div class="size-40 rounded-full border-4 border-primary/20 p-1 shrink-0">
+                    <img src="{{ kol.image }}" class="w-full h-full rounded-full object-cover" alt="{{ kol.name }}"
+                        onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ kol.name|urlencode }}&background=random'" />
+                </div>
+
+                <!-- Profile Info -->
+                <div class="flex-1 text-center md:text-left">
+                    <h1 class="text-4xl font-black mb-2">{{ kol.name }}</h1>
+                    <p class="text-[#9dabb8] text-xl mb-6">@{{ kol.username }}</p>
+
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start">
+                        {% for tag in kol.tags %}
+                        <span class="bg-[#293038] px-4 py-1.5 rounded-lg text-xs font-medium text-white">
+                            {{ tag }}
+                        </span>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3 justify-center md:justify-start">
+                        <a href="/add_to_list/{{ kol.username }}"
+                            class="inline-flex items-center gap-2 bg-primary hover:bg-blue-600 px-8 py-3 rounded-xl font-bold transition-all">
+                            <span class="material-symbols-outlined text-[20px]">bookmark_add</span>
+                            Tambahkan ke Daftar
+                        </a>
+                        <a href="https://instagram.com/{{ kol.username }}" target="_blank"
+                            class="inline-flex items-center gap-2 bg-[#293038] hover:bg-[#36404a] px-6 py-3 rounded-xl font-bold transition-all">
+                            <span class="material-symbols-outlined text-[20px]">open_in_new</span>
+                            View Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+
+            <!-- Followers Stat -->
+            <div
+                class="bg-surface-dark p-6 rounded-xl border border-[#3c4753]/30 hover:border-primary/30 transition-all">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-primary text-[20px]">group</span>
+                    <p class="text-[#9dabb8] text-sm font-semibold">Followers</p>
+                </div>
+                <span class="text-3xl font-black font-mono block">{{ kol.followers }}</span>
+            </div>
+
+            <!-- Engagement Rate Stat -->
+            <div
+                class="bg-surface-dark p-6 rounded-xl border border-[#3c4753]/30 hover:border-primary/30 transition-all">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-green-400 text-[20px]">trending_up</span>
+                    <p class="text-[#9dabb8] text-sm font-semibold">Engagement Rate</p>
+                </div>
+                <span class="text-3xl font-black font-mono text-green-400 block">{{ kol.er }}</span>
+            </div>
+
+            <!-- Average Likes Stat -->
+            <div
+                class="bg-surface-dark p-6 rounded-xl border border-[#3c4753]/30 hover:border-primary/30 transition-all">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-pink-400 text-[20px]">favorite</span>
+                    <p class="text-[#9dabb8] text-sm font-semibold">Avg. Likes</p>
+                </div>
+                <span class="text-3xl font-black font-mono block">
+                    {% if kol.avg_likes %}{{ kol.avg_likes }}{% else %}12.5K{% endif %}
+                </span>
+            </div>
+
+            <!-- Location Stat -->
+            <div
+                class="bg-surface-dark p-6 rounded-xl border border-[#3c4753]/30 hover:border-primary/30 transition-all">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-yellow-400 text-[20px]">location_on</span>
+                    <p class="text-[#9dabb8] text-sm font-semibold">Location</p>
+                </div>
+                <span class="text-2xl font-black block truncate" title="{{ kol.location }}">
+                    {{ kol.location }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Bio Section -->
+        <div class="bg-surface-dark p-8 rounded-2xl border border-[#3c4753]/30 mb-8">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-primary">person</span>
+                <h2 class="text-xl font-bold">Bio Influencer</h2>
+            </div>
+            <p class="text-[#9dabb8] text-lg leading-relaxed">
+                "{{ kol.bio }}"
+            </p>
+        </div>
+
+        <!-- Additional Info Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Platform Info -->
+            <div class="bg-surface-dark p-6 rounded-xl border border-[#3c4753]/30">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="material-symbols-outlined text-primary">insights</span>
+                    <h3 class="text-lg font-bold">Platform Info</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[#9dabb8] text-sm">Platform</span>
+                        <span class="text-white font-semibold">
+                            {% if kol.platform %}{{ kol.platform|capitalize }}{% else %}Instagram{% endif %}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[#9dabb8] text-sm">Account Type</span>
+                        <span class="text-white font-semibold">Creator</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[#9dabb8] text-sm">Verified</span>
+                        <span class="text-green-400 font-semibold">✓ Yes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="bg-surface-dark p-6 rounded-xl border border-[#3c4753]/30">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="material-symbols-outlined text-primary">contact_mail</span>
+                    <h3 class="text-lg font-bold">Contact Info</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[#9dabb8] text-sm">Email</span>
+                        <span class="text-white font-semibold text-sm">
+                            {% if kol.email %}{{ kol.email }}{% else %}contact@example.com{% endif %}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[#9dabb8] text-sm">Location</span>
+                        <span class="text-white font-semibold">{{ kol.location }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[#9dabb8] text-sm">Availability</span>
+                        <span class="text-green-400 font-semibold">Open for Collaboration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin Login - KOL Scout{% endblock %}
+
+{% block content %}
+<div class="flex-1 overflow-y-auto flex items-center justify-center">
+  <div class="w-full max-w-md p-6">
+
+    <!-- Login Card -->
+    <div class="relative bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl overflow-hidden">
+      <!-- Glow Effects -->
+      <div class="absolute -top-32 -right-32 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none"></div>
+      <div class="absolute -bottom-32 -left-32 w-64 h-64 bg-purple-600/15 rounded-full blur-[80px] pointer-events-none"></div>
+
+      <!-- Header -->
+      <div class="relative z-10 text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl border border-white/10 mb-4">
+          <span class="material-symbols-outlined text-[32px] text-primary">admin_panel_settings</span>
+        </div>
+        <h1 class="text-white text-2xl font-bold mb-1">Admin Panel</h1>
+        <p class="text-[#9dabb8] text-sm">Masukkan password untuk mengakses dashboard admin.</p>
+      </div>
+
+      <!-- Error Message -->
+      {% if error %}
+      <div class="relative z-10 bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 mb-6 flex items-center gap-3">
+        <span class="material-symbols-outlined text-red-400 text-[20px]">error</span>
+        <p class="text-red-400 text-sm font-medium">{{ error }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Login Form -->
+      <form method="POST" action="/login" class="relative z-10 flex flex-col gap-5">
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Password</label>
+          <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">lock</span>
+            <input name="password" type="password" required autofocus
+              class="bg-black/30 border border-white/5 rounded-xl pl-10 pr-12 py-3.5 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
+              placeholder="Masukkan password admin..." />
+            <button type="button" onclick="togglePassword(this)"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-[#9dabb8] hover:text-white transition-colors">
+              <span class="material-symbols-outlined text-[18px]">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3.5 rounded-xl font-bold transition-all hover:shadow-lg hover:shadow-primary/30 flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-[20px]">login</span>
+          Masuk ke Dashboard
+        </button>
+      </form>
+
+      <!-- Back Link -->
+      <div class="relative z-10 mt-6 text-center">
+        <a href="/" class="text-[#9dabb8] hover:text-white text-sm transition-colors inline-flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+          Kembali ke Halaman Utama
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePassword(btn) {
+    const input = btn.parentElement.querySelector('input');
+    const icon = btn.querySelector('.material-symbols-outlined');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.textContent = 'visibility_off';
+    } else {
+      input.type = 'password';
+      icon.textContent = 'visibility';
+    }
+  }
+</script>
+{% endblock %}

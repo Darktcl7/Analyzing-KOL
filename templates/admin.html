@@ -1,0 +1,252 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin Dashboard - KOL Scout{% endblock %}
+
+{% block content %}
+<div class="flex-1 overflow-y-auto">
+  <div class="max-w-[1200px] mx-auto w-full p-6 md:p-8">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-semibold rounded-full w-fit mb-2">
+          <span class="material-symbols-outlined text-[14px]">shield</span>
+          Admin Only
+        </div>
+        <h1 class="text-white text-3xl font-bold">Admin Dashboard</h1>
+        <p class="text-[#9dabb8] text-sm mt-1">Pantau dan kelola proses scraping data KOL.</p>
+      </div>
+      <a href="/logout"
+        class="inline-flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-4 py-2 rounded-xl text-sm font-medium transition-all w-fit">
+        <span class="material-symbols-outlined text-[18px]">logout</span>
+        Logout
+      </a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <!-- Total Profil -->
+      <div class="bg-[#1E2630]/60 backdrop-blur-xl rounded-xl border border-white/10 p-5 relative overflow-hidden">
+        <div class="absolute -top-8 -right-8 w-24 h-24 bg-blue-500/10 rounded-full blur-xl"></div>
+        <div class="flex items-center gap-3 relative z-10">
+          <div class="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-blue-400 text-[22px]">database</span>
+          </div>
+          <div>
+            <p class="text-[#9dabb8] text-xs uppercase font-bold tracking-wider">Total Profil</p>
+            <p class="text-white text-2xl font-bold" id="stat-total">{{ total_db }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jadwal Auto Scrape -->
+      <div class="bg-[#1E2630]/60 backdrop-blur-xl rounded-xl border border-white/10 p-5 relative overflow-hidden">
+        <div class="absolute -top-8 -right-8 w-24 h-24 bg-green-500/10 rounded-full blur-xl"></div>
+        <div class="flex items-center gap-3 relative z-10">
+          <div class="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-green-400 text-[22px]">schedule</span>
+          </div>
+          <div>
+            <p class="text-[#9dabb8] text-xs uppercase font-bold tracking-wider">Auto Scrape</p>
+            <p class="text-white text-lg font-bold">Setiap Jam 02:00</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Mesin -->
+      <div class="bg-[#1E2630]/60 backdrop-blur-xl rounded-xl border border-white/10 p-5 relative overflow-hidden">
+        <div class="absolute -top-8 -right-8 w-24 h-24 bg-purple-500/10 rounded-full blur-xl"></div>
+        <div class="flex items-center gap-3 relative z-10">
+          <div class="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-purple-400 text-[22px]">memory</span>
+          </div>
+          <div>
+            <p class="text-[#9dabb8] text-xs uppercase font-bold tracking-wider">Status Mesin</p>
+            <p class="text-lg font-bold" id="stat-engine-text">
+              <span class="text-[#9dabb8]">Mengecek...</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scraping Control Panel -->
+    <div class="bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 md:p-8 shadow-2xl relative overflow-hidden mb-8">
+      <!-- Glow -->
+      <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-white text-xl font-bold flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary">terminal</span>
+              Kontrol Scraping
+            </h2>
+            <p class="text-[#9dabb8] text-sm mt-1">Jalankan atau pantau proses scraping Instagram.</p>
+          </div>
+
+          <button id="btn-start-scrape" onclick="startScrape()"
+            class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-bold transition-all hover:shadow-lg hover:shadow-green-500/20">
+            <span class="material-symbols-outlined text-[20px]">rocket_launch</span>
+            Jalankan Scraper Sekarang
+          </button>
+        </div>
+
+        <!-- Live Status Box -->
+        <div class="bg-black/40 rounded-xl border border-white/5 p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <div id="status-dot" class="w-2.5 h-2.5 rounded-full bg-[#9dabb8]"></div>
+            <span class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Live Status</span>
+          </div>
+          <p class="text-white font-mono text-sm" id="status-text">Menghubungkan ke server...</p>
+
+          <!-- Progress Bar -->
+          <div class="mt-4 hidden" id="progress-container">
+            <div class="w-full bg-[#111418] rounded-full h-2.5 overflow-hidden">
+              <div id="progress-bar" class="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <p class="text-[#9dabb8] text-xs mt-2 font-mono" id="progress-text"></p>
+          </div>
+        </div>
+
+        <!-- Log Output -->
+        <div class="mt-4 bg-black/40 rounded-xl border border-white/5 p-5 hidden" id="log-container">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-[#9dabb8] text-[16px]">description</span>
+            <span class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Log Terakhir</span>
+          </div>
+          <div class="font-mono text-xs text-[#9dabb8] max-h-48 overflow-y-auto space-y-1" id="log-output">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Info -->
+    <div class="bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 relative overflow-hidden">
+      <div class="relative z-10">
+        <h2 class="text-white text-lg font-bold flex items-center gap-2 mb-4">
+          <span class="material-symbols-outlined text-amber-400">info</span>
+          Informasi
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-black/20 rounded-xl p-4 border border-white/5">
+            <h3 class="text-white text-sm font-bold mb-2">🕐 Jadwal Otomatis</h3>
+            <p class="text-[#9dabb8] text-xs leading-relaxed">Scraper akan berjalan otomatis setiap hari pukul <strong class="text-white">02:00 WIB</strong>. Data baru akan langsung masuk ke database lokal.</p>
+          </div>
+          <div class="bg-black/20 rounded-xl p-4 border border-white/5">
+            <h3 class="text-white text-sm font-bold mb-2">📸 Foto Profil</h3>
+            <p class="text-[#9dabb8] text-xs leading-relaxed">Foto profil Instagram diunduh otomatis ke server lokal agar tidak kedaluwarsa. Disimpan di folder <code class="text-primary">static/profiles/</code>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  let pollingInterval = null;
+
+  // Fetch scraping status from server
+  async function fetchStatus() {
+    try {
+      const res = await fetch('/api/scraping_status');
+      if (!res.ok) return;
+      const data = await res.json();
+
+      const statusText = document.getElementById('status-text');
+      const statusDot = document.getElementById('status-dot');
+      const progressContainer = document.getElementById('progress-container');
+      const progressBar = document.getElementById('progress-bar');
+      const progressText = document.getElementById('progress-text');
+      const engineText = document.getElementById('stat-engine-text');
+      const logContainer = document.getElementById('log-container');
+      const logOutput = document.getElementById('log-output');
+      const btnStart = document.getElementById('btn-start-scrape');
+
+      statusText.textContent = data.status || 'Tidak ada data';
+
+      if (data.is_running) {
+        // Running state
+        statusDot.className = 'w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse';
+        engineText.innerHTML = '<span class="text-green-400">● Berjalan</span>';
+        btnStart.disabled = true;
+        btnStart.classList.add('opacity-50', 'cursor-not-allowed');
+        btnStart.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span> Sedang Berjalan...';
+
+        if (data.progress !== undefined) {
+          progressContainer.classList.remove('hidden');
+          progressBar.style.width = data.progress + '%';
+          progressText.textContent = `${Math.round(data.progress)}% selesai`;
+        }
+      } else {
+        // Idle state
+        statusDot.className = 'w-2.5 h-2.5 rounded-full bg-[#9dabb8]';
+        engineText.innerHTML = '<span class="text-[#9dabb8]">● Idle</span>';
+        btnStart.disabled = false;
+        btnStart.classList.remove('opacity-50', 'cursor-not-allowed');
+        btnStart.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span> Jalankan Scraper Sekarang';
+        progressContainer.classList.add('hidden');
+
+        // Show last completed info
+        if (data.last_completed) {
+          statusText.textContent = `Terakhir selesai: ${data.last_completed}`;
+        }
+      }
+
+      // Show log if available
+      if (data.log && data.log.length > 0) {
+        logContainer.classList.remove('hidden');
+        logOutput.innerHTML = data.log.map(l => `<p>${l}</p>`).join('');
+        logOutput.scrollTop = logOutput.scrollHeight;
+      }
+
+      // Update total count
+      if (data.total_profiles !== undefined) {
+        document.getElementById('stat-total').textContent = data.total_profiles;
+      }
+
+    } catch (err) {
+      console.error('Status fetch error:', err);
+    }
+  }
+
+  // Start scrape manually
+  async function startScrape() {
+    const btn = document.getElementById('btn-start-scrape');
+    btn.disabled = true;
+    btn.classList.add('opacity-50');
+    btn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span> Memulai...';
+
+    try {
+      const res = await fetch('/api/start_scrape', { method: 'POST' });
+      const data = await res.json();
+
+      if (data.status === 'started') {
+        // Start polling faster
+        if (pollingInterval) clearInterval(pollingInterval);
+        pollingInterval = setInterval(fetchStatus, 3000);
+        fetchStatus();
+      } else {
+        alert('Gagal memulai scraper: ' + (data.message || 'Unknown error'));
+        btn.disabled = false;
+        btn.classList.remove('opacity-50');
+        btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span> Jalankan Scraper Sekarang';
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+      btn.disabled = false;
+      btn.classList.remove('opacity-50');
+      btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span> Jalankan Scraper Sekarang';
+    }
+  }
+
+  // Start polling on page load
+  document.addEventListener('DOMContentLoaded', function () {
+    fetchStatus();
+    pollingInterval = setInterval(fetchStatus, 5000);
+  });
+</script>
+{% endblock %}

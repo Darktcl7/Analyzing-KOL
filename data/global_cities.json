@@ -1,0 +1,2104 @@
+{
+    "countries": [
+        {
+            "name": "United States",
+            "code": "US",
+            "aliases": [
+                "USA",
+                "America",
+                "US",
+                "United States of America"
+            ],
+            "cities": [
+                {
+                    "name": "New York",
+                    "aliases": [
+                        "NYC",
+                        "New York City",
+                        "NY"
+                    ]
+                },
+                {
+                    "name": "Los Angeles",
+                    "aliases": [
+                        "LA",
+                        "L.A."
+                    ]
+                },
+                {
+                    "name": "Chicago",
+                    "aliases": []
+                },
+                {
+                    "name": "Houston",
+                    "aliases": []
+                },
+                {
+                    "name": "Phoenix",
+                    "aliases": []
+                },
+                {
+                    "name": "Philadelphia",
+                    "aliases": [
+                        "Philly"
+                    ]
+                },
+                {
+                    "name": "San Antonio",
+                    "aliases": []
+                },
+                {
+                    "name": "San Diego",
+                    "aliases": []
+                },
+                {
+                    "name": "Dallas",
+                    "aliases": []
+                },
+                {
+                    "name": "San Francisco",
+                    "aliases": [
+                        "SF"
+                    ]
+                },
+                {
+                    "name": "Austin",
+                    "aliases": []
+                },
+                {
+                    "name": "Seattle",
+                    "aliases": []
+                },
+                {
+                    "name": "Denver",
+                    "aliases": []
+                },
+                {
+                    "name": "Boston",
+                    "aliases": []
+                },
+                {
+                    "name": "Miami",
+                    "aliases": []
+                },
+                {
+                    "name": "Atlanta",
+                    "aliases": [
+                        "ATL"
+                    ]
+                },
+                {
+                    "name": "Las Vegas",
+                    "aliases": [
+                        "Vegas"
+                    ]
+                },
+                {
+                    "name": "Portland",
+                    "aliases": []
+                },
+                {
+                    "name": "Nashville",
+                    "aliases": []
+                },
+                {
+                    "name": "Detroit",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "United Kingdom",
+            "code": "UK",
+            "aliases": [
+                "UK",
+                "Britain",
+                "England",
+                "Great Britain"
+            ],
+            "cities": [
+                {
+                    "name": "London",
+                    "aliases": []
+                },
+                {
+                    "name": "Manchester",
+                    "aliases": []
+                },
+                {
+                    "name": "Birmingham",
+                    "aliases": []
+                },
+                {
+                    "name": "Liverpool",
+                    "aliases": []
+                },
+                {
+                    "name": "Leeds",
+                    "aliases": []
+                },
+                {
+                    "name": "Glasgow",
+                    "aliases": []
+                },
+                {
+                    "name": "Edinburgh",
+                    "aliases": []
+                },
+                {
+                    "name": "Bristol",
+                    "aliases": []
+                },
+                {
+                    "name": "Sheffield",
+                    "aliases": []
+                },
+                {
+                    "name": "Cardiff",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Australia",
+            "code": "AU",
+            "aliases": [
+                "Aus",
+                "Aussie"
+            ],
+            "cities": [
+                {
+                    "name": "Sydney",
+                    "aliases": []
+                },
+                {
+                    "name": "Melbourne",
+                    "aliases": []
+                },
+                {
+                    "name": "Brisbane",
+                    "aliases": []
+                },
+                {
+                    "name": "Perth",
+                    "aliases": []
+                },
+                {
+                    "name": "Adelaide",
+                    "aliases": []
+                },
+                {
+                    "name": "Gold Coast",
+                    "aliases": []
+                },
+                {
+                    "name": "Canberra",
+                    "aliases": []
+                },
+                {
+                    "name": "Newcastle",
+                    "aliases": []
+                },
+                {
+                    "name": "Hobart",
+                    "aliases": []
+                },
+                {
+                    "name": "Darwin",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Canada",
+            "code": "CA",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Toronto",
+                    "aliases": []
+                },
+                {
+                    "name": "Montreal",
+                    "aliases": [
+                        "Montréal"
+                    ]
+                },
+                {
+                    "name": "Vancouver",
+                    "aliases": []
+                },
+                {
+                    "name": "Calgary",
+                    "aliases": []
+                },
+                {
+                    "name": "Edmonton",
+                    "aliases": []
+                },
+                {
+                    "name": "Ottawa",
+                    "aliases": []
+                },
+                {
+                    "name": "Winnipeg",
+                    "aliases": []
+                },
+                {
+                    "name": "Quebec City",
+                    "aliases": [
+                        "Québec"
+                    ]
+                },
+                {
+                    "name": "Halifax",
+                    "aliases": []
+                },
+                {
+                    "name": "Victoria",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Singapore",
+            "code": "SG",
+            "aliases": [
+                "SG",
+                "Singapura"
+            ],
+            "cities": [
+                {
+                    "name": "Singapore",
+                    "aliases": [
+                        "SG",
+                        "Singapura"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Malaysia",
+            "code": "MY",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Kuala Lumpur",
+                    "aliases": [
+                        "KL"
+                    ]
+                },
+                {
+                    "name": "Penang",
+                    "aliases": [
+                        "Pulau Pinang",
+                        "Georgetown"
+                    ]
+                },
+                {
+                    "name": "Johor Bahru",
+                    "aliases": [
+                        "JB"
+                    ]
+                },
+                {
+                    "name": "Malacca",
+                    "aliases": [
+                        "Melaka"
+                    ]
+                },
+                {
+                    "name": "Ipoh",
+                    "aliases": []
+                },
+                {
+                    "name": "Kuching",
+                    "aliases": []
+                },
+                {
+                    "name": "Kota Kinabalu",
+                    "aliases": [
+                        "KK"
+                    ]
+                },
+                {
+                    "name": "Shah Alam",
+                    "aliases": []
+                },
+                {
+                    "name": "Petaling Jaya",
+                    "aliases": [
+                        "PJ"
+                    ]
+                },
+                {
+                    "name": "Subang Jaya",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Thailand",
+            "code": "TH",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Bangkok",
+                    "aliases": [
+                        "BKK",
+                        "Krung Thep"
+                    ]
+                },
+                {
+                    "name": "Chiang Mai",
+                    "aliases": []
+                },
+                {
+                    "name": "Phuket",
+                    "aliases": []
+                },
+                {
+                    "name": "Pattaya",
+                    "aliases": []
+                },
+                {
+                    "name": "Krabi",
+                    "aliases": []
+                },
+                {
+                    "name": "Koh Samui",
+                    "aliases": [
+                        "Samui"
+                    ]
+                },
+                {
+                    "name": "Hua Hin",
+                    "aliases": []
+                },
+                {
+                    "name": "Chiang Rai",
+                    "aliases": []
+                },
+                {
+                    "name": "Ayutthaya",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Philippines",
+            "code": "PH",
+            "aliases": [
+                "Pilipinas"
+            ],
+            "cities": [
+                {
+                    "name": "Manila",
+                    "aliases": []
+                },
+                {
+                    "name": "Quezon City",
+                    "aliases": [
+                        "QC"
+                    ]
+                },
+                {
+                    "name": "Cebu",
+                    "aliases": [
+                        "Cebu City"
+                    ]
+                },
+                {
+                    "name": "Davao",
+                    "aliases": [
+                        "Davao City"
+                    ]
+                },
+                {
+                    "name": "Makati",
+                    "aliases": []
+                },
+                {
+                    "name": "Taguig",
+                    "aliases": [
+                        "BGC",
+                        "Bonifacio Global City"
+                    ]
+                },
+                {
+                    "name": "Pasig",
+                    "aliases": []
+                },
+                {
+                    "name": "Pasay",
+                    "aliases": []
+                },
+                {
+                    "name": "Baguio",
+                    "aliases": []
+                },
+                {
+                    "name": "Iloilo",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Vietnam",
+            "code": "VN",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Ho Chi Minh City",
+                    "aliases": [
+                        "HCMC",
+                        "Saigon"
+                    ]
+                },
+                {
+                    "name": "Hanoi",
+                    "aliases": []
+                },
+                {
+                    "name": "Da Nang",
+                    "aliases": [
+                        "Danang"
+                    ]
+                },
+                {
+                    "name": "Nha Trang",
+                    "aliases": []
+                },
+                {
+                    "name": "Hoi An",
+                    "aliases": []
+                },
+                {
+                    "name": "Hue",
+                    "aliases": []
+                },
+                {
+                    "name": "Can Tho",
+                    "aliases": []
+                },
+                {
+                    "name": "Haiphong",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Japan",
+            "code": "JP",
+            "aliases": [
+                "Jepang",
+                "Nippon"
+            ],
+            "cities": [
+                {
+                    "name": "Tokyo",
+                    "aliases": []
+                },
+                {
+                    "name": "Osaka",
+                    "aliases": []
+                },
+                {
+                    "name": "Kyoto",
+                    "aliases": []
+                },
+                {
+                    "name": "Yokohama",
+                    "aliases": []
+                },
+                {
+                    "name": "Nagoya",
+                    "aliases": []
+                },
+                {
+                    "name": "Sapporo",
+                    "aliases": []
+                },
+                {
+                    "name": "Fukuoka",
+                    "aliases": []
+                },
+                {
+                    "name": "Kobe",
+                    "aliases": []
+                },
+                {
+                    "name": "Hiroshima",
+                    "aliases": []
+                },
+                {
+                    "name": "Okinawa",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "South Korea",
+            "code": "KR",
+            "aliases": [
+                "Korea",
+                "Korea Selatan"
+            ],
+            "cities": [
+                {
+                    "name": "Seoul",
+                    "aliases": []
+                },
+                {
+                    "name": "Busan",
+                    "aliases": []
+                },
+                {
+                    "name": "Incheon",
+                    "aliases": []
+                },
+                {
+                    "name": "Daegu",
+                    "aliases": []
+                },
+                {
+                    "name": "Daejeon",
+                    "aliases": []
+                },
+                {
+                    "name": "Gwangju",
+                    "aliases": []
+                },
+                {
+                    "name": "Jeju",
+                    "aliases": [
+                        "Jeju Island"
+                    ]
+                },
+                {
+                    "name": "Ulsan",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "China",
+            "code": "CN",
+            "aliases": [
+                "Tiongkok",
+                "PRC"
+            ],
+            "cities": [
+                {
+                    "name": "Beijing",
+                    "aliases": [
+                        "Peking"
+                    ]
+                },
+                {
+                    "name": "Shanghai",
+                    "aliases": []
+                },
+                {
+                    "name": "Guangzhou",
+                    "aliases": [
+                        "Canton"
+                    ]
+                },
+                {
+                    "name": "Shenzhen",
+                    "aliases": []
+                },
+                {
+                    "name": "Chengdu",
+                    "aliases": []
+                },
+                {
+                    "name": "Hangzhou",
+                    "aliases": []
+                },
+                {
+                    "name": "Wuhan",
+                    "aliases": []
+                },
+                {
+                    "name": "Xian",
+                    "aliases": [
+                        "Xi'an"
+                    ]
+                },
+                {
+                    "name": "Nanjing",
+                    "aliases": []
+                },
+                {
+                    "name": "Chongqing",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Hong Kong",
+            "code": "HK",
+            "aliases": [
+                "HK"
+            ],
+            "cities": [
+                {
+                    "name": "Hong Kong",
+                    "aliases": [
+                        "HK"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Taiwan",
+            "code": "TW",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Taipei",
+                    "aliases": []
+                },
+                {
+                    "name": "Kaohsiung",
+                    "aliases": []
+                },
+                {
+                    "name": "Taichung",
+                    "aliases": []
+                },
+                {
+                    "name": "Tainan",
+                    "aliases": []
+                },
+                {
+                    "name": "Hsinchu",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "India",
+            "code": "IN",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Mumbai",
+                    "aliases": [
+                        "Bombay"
+                    ]
+                },
+                {
+                    "name": "Delhi",
+                    "aliases": [
+                        "New Delhi"
+                    ]
+                },
+                {
+                    "name": "Bangalore",
+                    "aliases": [
+                        "Bengaluru"
+                    ]
+                },
+                {
+                    "name": "Hyderabad",
+                    "aliases": []
+                },
+                {
+                    "name": "Chennai",
+                    "aliases": [
+                        "Madras"
+                    ]
+                },
+                {
+                    "name": "Kolkata",
+                    "aliases": [
+                        "Calcutta"
+                    ]
+                },
+                {
+                    "name": "Pune",
+                    "aliases": []
+                },
+                {
+                    "name": "Ahmedabad",
+                    "aliases": []
+                },
+                {
+                    "name": "Jaipur",
+                    "aliases": []
+                },
+                {
+                    "name": "Goa",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "United Arab Emirates",
+            "code": "AE",
+            "aliases": [
+                "UAE",
+                "Emirat"
+            ],
+            "cities": [
+                {
+                    "name": "Dubai",
+                    "aliases": []
+                },
+                {
+                    "name": "Abu Dhabi",
+                    "aliases": []
+                },
+                {
+                    "name": "Sharjah",
+                    "aliases": []
+                },
+                {
+                    "name": "Ajman",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Saudi Arabia",
+            "code": "SA",
+            "aliases": [
+                "KSA",
+                "Arab Saudi"
+            ],
+            "cities": [
+                {
+                    "name": "Riyadh",
+                    "aliases": []
+                },
+                {
+                    "name": "Jeddah",
+                    "aliases": []
+                },
+                {
+                    "name": "Mecca",
+                    "aliases": [
+                        "Makkah",
+                        "Mekkah"
+                    ]
+                },
+                {
+                    "name": "Medina",
+                    "aliases": [
+                        "Madinah"
+                    ]
+                },
+                {
+                    "name": "Dammam",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Turkey",
+            "code": "TR",
+            "aliases": [
+                "Turki",
+                "Türkiye"
+            ],
+            "cities": [
+                {
+                    "name": "Istanbul",
+                    "aliases": []
+                },
+                {
+                    "name": "Ankara",
+                    "aliases": []
+                },
+                {
+                    "name": "Izmir",
+                    "aliases": []
+                },
+                {
+                    "name": "Antalya",
+                    "aliases": []
+                },
+                {
+                    "name": "Bursa",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Germany",
+            "code": "DE",
+            "aliases": [
+                "Jerman",
+                "Deutschland"
+            ],
+            "cities": [
+                {
+                    "name": "Berlin",
+                    "aliases": []
+                },
+                {
+                    "name": "Munich",
+                    "aliases": [
+                        "München"
+                    ]
+                },
+                {
+                    "name": "Frankfurt",
+                    "aliases": []
+                },
+                {
+                    "name": "Hamburg",
+                    "aliases": []
+                },
+                {
+                    "name": "Cologne",
+                    "aliases": [
+                        "Köln"
+                    ]
+                },
+                {
+                    "name": "Düsseldorf",
+                    "aliases": []
+                },
+                {
+                    "name": "Stuttgart",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "France",
+            "code": "FR",
+            "aliases": [
+                "Perancis"
+            ],
+            "cities": [
+                {
+                    "name": "Paris",
+                    "aliases": []
+                },
+                {
+                    "name": "Lyon",
+                    "aliases": []
+                },
+                {
+                    "name": "Marseille",
+                    "aliases": []
+                },
+                {
+                    "name": "Nice",
+                    "aliases": []
+                },
+                {
+                    "name": "Toulouse",
+                    "aliases": []
+                },
+                {
+                    "name": "Bordeaux",
+                    "aliases": []
+                },
+                {
+                    "name": "Strasbourg",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Italy",
+            "code": "IT",
+            "aliases": [
+                "Italia"
+            ],
+            "cities": [
+                {
+                    "name": "Rome",
+                    "aliases": [
+                        "Roma"
+                    ]
+                },
+                {
+                    "name": "Milan",
+                    "aliases": [
+                        "Milano"
+                    ]
+                },
+                {
+                    "name": "Florence",
+                    "aliases": [
+                        "Firenze"
+                    ]
+                },
+                {
+                    "name": "Venice",
+                    "aliases": [
+                        "Venezia"
+                    ]
+                },
+                {
+                    "name": "Naples",
+                    "aliases": [
+                        "Napoli"
+                    ]
+                },
+                {
+                    "name": "Turin",
+                    "aliases": [
+                        "Torino"
+                    ]
+                },
+                {
+                    "name": "Bologna",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Spain",
+            "code": "ES",
+            "aliases": [
+                "Spanyol",
+                "España"
+            ],
+            "cities": [
+                {
+                    "name": "Madrid",
+                    "aliases": []
+                },
+                {
+                    "name": "Barcelona",
+                    "aliases": []
+                },
+                {
+                    "name": "Valencia",
+                    "aliases": []
+                },
+                {
+                    "name": "Seville",
+                    "aliases": [
+                        "Sevilla"
+                    ]
+                },
+                {
+                    "name": "Malaga",
+                    "aliases": [
+                        "Málaga"
+                    ]
+                },
+                {
+                    "name": "Bilbao",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Netherlands",
+            "code": "NL",
+            "aliases": [
+                "Belanda",
+                "Holland"
+            ],
+            "cities": [
+                {
+                    "name": "Amsterdam",
+                    "aliases": []
+                },
+                {
+                    "name": "Rotterdam",
+                    "aliases": []
+                },
+                {
+                    "name": "The Hague",
+                    "aliases": [
+                        "Den Haag"
+                    ]
+                },
+                {
+                    "name": "Utrecht",
+                    "aliases": []
+                },
+                {
+                    "name": "Eindhoven",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Brazil",
+            "code": "BR",
+            "aliases": [
+                "Brasil"
+            ],
+            "cities": [
+                {
+                    "name": "Sao Paulo",
+                    "aliases": [
+                        "São Paulo",
+                        "SP"
+                    ]
+                },
+                {
+                    "name": "Rio de Janeiro",
+                    "aliases": [
+                        "Rio"
+                    ]
+                },
+                {
+                    "name": "Brasilia",
+                    "aliases": [
+                        "Brasília"
+                    ]
+                },
+                {
+                    "name": "Salvador",
+                    "aliases": []
+                },
+                {
+                    "name": "Fortaleza",
+                    "aliases": []
+                },
+                {
+                    "name": "Belo Horizonte",
+                    "aliases": []
+                },
+                {
+                    "name": "Curitiba",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Mexico",
+            "code": "MX",
+            "aliases": [
+                "Meksiko"
+            ],
+            "cities": [
+                {
+                    "name": "Mexico City",
+                    "aliases": [
+                        "CDMX",
+                        "Ciudad de México"
+                    ]
+                },
+                {
+                    "name": "Guadalajara",
+                    "aliases": []
+                },
+                {
+                    "name": "Monterrey",
+                    "aliases": []
+                },
+                {
+                    "name": "Cancun",
+                    "aliases": [
+                        "Cancún"
+                    ]
+                },
+                {
+                    "name": "Tijuana",
+                    "aliases": []
+                },
+                {
+                    "name": "Puebla",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Russia",
+            "code": "RU",
+            "aliases": [
+                "Rusia"
+            ],
+            "cities": [
+                {
+                    "name": "Moscow",
+                    "aliases": [
+                        "Moskow",
+                        "Moskva"
+                    ]
+                },
+                {
+                    "name": "Saint Petersburg",
+                    "aliases": [
+                        "St. Petersburg"
+                    ]
+                },
+                {
+                    "name": "Novosibirsk",
+                    "aliases": []
+                },
+                {
+                    "name": "Yekaterinburg",
+                    "aliases": []
+                },
+                {
+                    "name": "Kazan",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "South Africa",
+            "code": "ZA",
+            "aliases": [
+                "Afrika Selatan"
+            ],
+            "cities": [
+                {
+                    "name": "Johannesburg",
+                    "aliases": [
+                        "Joburg"
+                    ]
+                },
+                {
+                    "name": "Cape Town",
+                    "aliases": []
+                },
+                {
+                    "name": "Durban",
+                    "aliases": []
+                },
+                {
+                    "name": "Pretoria",
+                    "aliases": []
+                },
+                {
+                    "name": "Port Elizabeth",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Egypt",
+            "code": "EG",
+            "aliases": [
+                "Mesir"
+            ],
+            "cities": [
+                {
+                    "name": "Cairo",
+                    "aliases": [
+                        "Kairo"
+                    ]
+                },
+                {
+                    "name": "Alexandria",
+                    "aliases": [
+                        "Iskandariyah"
+                    ]
+                },
+                {
+                    "name": "Giza",
+                    "aliases": []
+                },
+                {
+                    "name": "Luxor",
+                    "aliases": []
+                },
+                {
+                    "name": "Sharm El Sheikh",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Nigeria",
+            "code": "NG",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Lagos",
+                    "aliases": []
+                },
+                {
+                    "name": "Abuja",
+                    "aliases": []
+                },
+                {
+                    "name": "Kano",
+                    "aliases": []
+                },
+                {
+                    "name": "Ibadan",
+                    "aliases": []
+                },
+                {
+                    "name": "Port Harcourt",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Kenya",
+            "code": "KE",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Nairobi",
+                    "aliases": []
+                },
+                {
+                    "name": "Mombasa",
+                    "aliases": []
+                },
+                {
+                    "name": "Kisumu",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "New Zealand",
+            "code": "NZ",
+            "aliases": [
+                "Selandia Baru"
+            ],
+            "cities": [
+                {
+                    "name": "Auckland",
+                    "aliases": []
+                },
+                {
+                    "name": "Wellington",
+                    "aliases": []
+                },
+                {
+                    "name": "Christchurch",
+                    "aliases": []
+                },
+                {
+                    "name": "Queenstown",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Argentina",
+            "code": "AR",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Buenos Aires",
+                    "aliases": []
+                },
+                {
+                    "name": "Cordoba",
+                    "aliases": [
+                        "Córdoba"
+                    ]
+                },
+                {
+                    "name": "Rosario",
+                    "aliases": []
+                },
+                {
+                    "name": "Mendoza",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Colombia",
+            "code": "CO",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Bogota",
+                    "aliases": [
+                        "Bogotá"
+                    ]
+                },
+                {
+                    "name": "Medellin",
+                    "aliases": [
+                        "Medellín"
+                    ]
+                },
+                {
+                    "name": "Cali",
+                    "aliases": []
+                },
+                {
+                    "name": "Cartagena",
+                    "aliases": []
+                },
+                {
+                    "name": "Barranquilla",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Chile",
+            "code": "CL",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Santiago",
+                    "aliases": []
+                },
+                {
+                    "name": "Valparaiso",
+                    "aliases": [
+                        "Valparaíso"
+                    ]
+                },
+                {
+                    "name": "Concepcion",
+                    "aliases": [
+                        "Concepción"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Peru",
+            "code": "PE",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Lima",
+                    "aliases": []
+                },
+                {
+                    "name": "Cusco",
+                    "aliases": [
+                        "Cuzco"
+                    ]
+                },
+                {
+                    "name": "Arequipa",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Poland",
+            "code": "PL",
+            "aliases": [
+                "Polandia"
+            ],
+            "cities": [
+                {
+                    "name": "Warsaw",
+                    "aliases": [
+                        "Warszawa"
+                    ]
+                },
+                {
+                    "name": "Krakow",
+                    "aliases": [
+                        "Kraków"
+                    ]
+                },
+                {
+                    "name": "Wroclaw",
+                    "aliases": [
+                        "Wrocław"
+                    ]
+                },
+                {
+                    "name": "Poznan",
+                    "aliases": [
+                        "Poznań"
+                    ]
+                },
+                {
+                    "name": "Gdansk",
+                    "aliases": [
+                        "Gdańsk"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Sweden",
+            "code": "SE",
+            "aliases": [
+                "Swedia"
+            ],
+            "cities": [
+                {
+                    "name": "Stockholm",
+                    "aliases": []
+                },
+                {
+                    "name": "Gothenburg",
+                    "aliases": [
+                        "Göteborg"
+                    ]
+                },
+                {
+                    "name": "Malmo",
+                    "aliases": [
+                        "Malmö"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Norway",
+            "code": "NO",
+            "aliases": [
+                "Norwegia"
+            ],
+            "cities": [
+                {
+                    "name": "Oslo",
+                    "aliases": []
+                },
+                {
+                    "name": "Bergen",
+                    "aliases": []
+                },
+                {
+                    "name": "Trondheim",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Denmark",
+            "code": "DK",
+            "aliases": [
+                "Danmark"
+            ],
+            "cities": [
+                {
+                    "name": "Copenhagen",
+                    "aliases": [
+                        "København"
+                    ]
+                },
+                {
+                    "name": "Aarhus",
+                    "aliases": []
+                },
+                {
+                    "name": "Odense",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Finland",
+            "code": "FI",
+            "aliases": [
+                "Finlandia"
+            ],
+            "cities": [
+                {
+                    "name": "Helsinki",
+                    "aliases": []
+                },
+                {
+                    "name": "Espoo",
+                    "aliases": []
+                },
+                {
+                    "name": "Tampere",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Switzerland",
+            "code": "CH",
+            "aliases": [
+                "Swiss",
+                "Suisse"
+            ],
+            "cities": [
+                {
+                    "name": "Zurich",
+                    "aliases": [
+                        "Zürich"
+                    ]
+                },
+                {
+                    "name": "Geneva",
+                    "aliases": [
+                        "Genève"
+                    ]
+                },
+                {
+                    "name": "Basel",
+                    "aliases": []
+                },
+                {
+                    "name": "Bern",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Austria",
+            "code": "AT",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Vienna",
+                    "aliases": [
+                        "Wien"
+                    ]
+                },
+                {
+                    "name": "Salzburg",
+                    "aliases": []
+                },
+                {
+                    "name": "Innsbruck",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Belgium",
+            "code": "BE",
+            "aliases": [
+                "Belgia"
+            ],
+            "cities": [
+                {
+                    "name": "Brussels",
+                    "aliases": [
+                        "Bruxelles"
+                    ]
+                },
+                {
+                    "name": "Antwerp",
+                    "aliases": [
+                        "Antwerpen"
+                    ]
+                },
+                {
+                    "name": "Ghent",
+                    "aliases": [
+                        "Gent"
+                    ]
+                },
+                {
+                    "name": "Bruges",
+                    "aliases": [
+                        "Brugge"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Portugal",
+            "code": "PT",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Lisbon",
+                    "aliases": [
+                        "Lisboa"
+                    ]
+                },
+                {
+                    "name": "Porto",
+                    "aliases": []
+                },
+                {
+                    "name": "Faro",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Greece",
+            "code": "GR",
+            "aliases": [
+                "Yunani"
+            ],
+            "cities": [
+                {
+                    "name": "Athens",
+                    "aliases": [
+                        "Athina"
+                    ]
+                },
+                {
+                    "name": "Thessaloniki",
+                    "aliases": []
+                },
+                {
+                    "name": "Santorini",
+                    "aliases": []
+                },
+                {
+                    "name": "Mykonos",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Czech Republic",
+            "code": "CZ",
+            "aliases": [
+                "Czechia"
+            ],
+            "cities": [
+                {
+                    "name": "Prague",
+                    "aliases": [
+                        "Praha"
+                    ]
+                },
+                {
+                    "name": "Brno",
+                    "aliases": []
+                },
+                {
+                    "name": "Ostrava",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Hungary",
+            "code": "HU",
+            "aliases": [
+                "Hongaria"
+            ],
+            "cities": [
+                {
+                    "name": "Budapest",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Ireland",
+            "code": "IE",
+            "aliases": [
+                "Irlandia"
+            ],
+            "cities": [
+                {
+                    "name": "Dublin",
+                    "aliases": []
+                },
+                {
+                    "name": "Cork",
+                    "aliases": []
+                },
+                {
+                    "name": "Galway",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Israel",
+            "code": "IL",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Tel Aviv",
+                    "aliases": []
+                },
+                {
+                    "name": "Jerusalem",
+                    "aliases": []
+                },
+                {
+                    "name": "Haifa",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Pakistan",
+            "code": "PK",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Karachi",
+                    "aliases": []
+                },
+                {
+                    "name": "Lahore",
+                    "aliases": []
+                },
+                {
+                    "name": "Islamabad",
+                    "aliases": []
+                },
+                {
+                    "name": "Rawalpindi",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Bangladesh",
+            "code": "BD",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Dhaka",
+                    "aliases": []
+                },
+                {
+                    "name": "Chittagong",
+                    "aliases": []
+                },
+                {
+                    "name": "Khulna",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Sri Lanka",
+            "code": "LK",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Colombo",
+                    "aliases": []
+                },
+                {
+                    "name": "Kandy",
+                    "aliases": []
+                },
+                {
+                    "name": "Galle",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Myanmar",
+            "code": "MM",
+            "aliases": [
+                "Burma"
+            ],
+            "cities": [
+                {
+                    "name": "Yangon",
+                    "aliases": [
+                        "Rangoon"
+                    ]
+                },
+                {
+                    "name": "Mandalay",
+                    "aliases": []
+                },
+                {
+                    "name": "Naypyidaw",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Cambodia",
+            "code": "KH",
+            "aliases": [
+                "Kamboja"
+            ],
+            "cities": [
+                {
+                    "name": "Phnom Penh",
+                    "aliases": []
+                },
+                {
+                    "name": "Siem Reap",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Laos",
+            "code": "LA",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Vientiane",
+                    "aliases": []
+                },
+                {
+                    "name": "Luang Prabang",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Brunei",
+            "code": "BN",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Bandar Seri Begawan",
+                    "aliases": [
+                        "BSB"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Maldives",
+            "code": "MV",
+            "aliases": [
+                "Maladewa"
+            ],
+            "cities": [
+                {
+                    "name": "Male",
+                    "aliases": [
+                        "Malé"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Nepal",
+            "code": "NP",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Kathmandu",
+                    "aliases": []
+                },
+                {
+                    "name": "Pokhara",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Morocco",
+            "code": "MA",
+            "aliases": [
+                "Maroko"
+            ],
+            "cities": [
+                {
+                    "name": "Casablanca",
+                    "aliases": []
+                },
+                {
+                    "name": "Marrakech",
+                    "aliases": [
+                        "Marrakesh"
+                    ]
+                },
+                {
+                    "name": "Rabat",
+                    "aliases": []
+                },
+                {
+                    "name": "Fez",
+                    "aliases": [
+                        "Fes"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Qatar",
+            "code": "QA",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Doha",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Kuwait",
+            "code": "KW",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Kuwait City",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Bahrain",
+            "code": "BH",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Manama",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Oman",
+            "code": "OM",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Muscat",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Jordan",
+            "code": "JO",
+            "aliases": [
+                "Yordania"
+            ],
+            "cities": [
+                {
+                    "name": "Amman",
+                    "aliases": []
+                },
+                {
+                    "name": "Petra",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Lebanon",
+            "code": "LB",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Beirut",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Romania",
+            "code": "RO",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Bucharest",
+                    "aliases": [
+                        "București"
+                    ]
+                },
+                {
+                    "name": "Cluj-Napoca",
+                    "aliases": []
+                },
+                {
+                    "name": "Timisoara",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Ukraine",
+            "code": "UA",
+            "aliases": [
+                "Ukraina"
+            ],
+            "cities": [
+                {
+                    "name": "Kyiv",
+                    "aliases": [
+                        "Kiev"
+                    ]
+                },
+                {
+                    "name": "Lviv",
+                    "aliases": []
+                },
+                {
+                    "name": "Odessa",
+                    "aliases": [
+                        "Odesa"
+                    ]
+                },
+                {
+                    "name": "Kharkiv",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Croatia",
+            "code": "HR",
+            "aliases": [
+                "Kroasia"
+            ],
+            "cities": [
+                {
+                    "name": "Zagreb",
+                    "aliases": []
+                },
+                {
+                    "name": "Split",
+                    "aliases": []
+                },
+                {
+                    "name": "Dubrovnik",
+                    "aliases": []
+                }
+            ]
+        },
+        {
+            "name": "Serbia",
+            "code": "RS",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Belgrade",
+                    "aliases": [
+                        "Beograd"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Bulgaria",
+            "code": "BG",
+            "aliases": [],
+            "cities": [
+                {
+                    "name": "Sofia",
+                    "aliases": []
+                },
+                {
+                    "name": "Plovdiv",
+                    "aliases": []
+                }
+            ]
+        }
+    ],
+    "popular_global_cities": [
+        "New York",
+        "London",
+        "Tokyo",
+        "Paris",
+        "Dubai",
+        "Singapore",
+        "Hong Kong",
+        "Los Angeles",
+        "Sydney",
+        "Seoul",
+        "Bangkok",
+        "Istanbul",
+        "Kuala Lumpur",
+        "Berlin",
+        "Toronto",
+        "Mumbai",
+        "Shanghai",
+        "Barcelona",
+        "Amsterdam",
+        "Rome",
+        "Miami",
+        "San Francisco",
+        "Melbourne",
+        "Manila",
+        "Taipei",
+        "Vienna"
+    ]
+}

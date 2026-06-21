@@ -1,0 +1,225 @@
+{% extends "layout.html" %}
+
+{% block title %}Saved Lists - KOL Scout{% endblock %}
+
+{% block content %}
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+            <div>
+                <h1 class="text-3xl font-black mb-1">My Saved KOLs</h1>
+                <p class="text-[#9dabb8]">Kelola daftar influencer terpilih untuk kampanye Anda.</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="window.print()"
+                    class="inline-flex items-center gap-2 bg-[#293038] hover:bg-[#36404a] px-5 py-3 rounded-xl font-bold transition-all">
+                    <span class="material-symbols-outlined text-[20px]">print</span>
+                    Print
+                </button>
+                <button
+                    class="inline-flex items-center gap-2 bg-primary hover:bg-blue-600 px-5 py-3 rounded-xl font-bold transition-all">
+                    <span class="material-symbols-outlined text-[20px]">download</span>
+                    Export to CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-surface-dark p-6 rounded-xl border border-[#3c4753]/30">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-primary/20 rounded-lg">
+                        <span class="material-symbols-outlined text-primary text-2xl">bookmarks</span>
+                    </div>
+                    <div>
+                        <p class="text-[#9dabb8] text-sm">Total Saved</p>
+                        <p class="text-3xl font-black">{{ influencers|length }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-surface-dark p-6 rounded-xl border border-[#3c4753]/30">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-green-500/20 rounded-lg">
+                        <span class="material-symbols-outlined text-green-400 text-2xl">group</span>
+                    </div>
+                    <div>
+                        <p class="text-[#9dabb8] text-sm">Total Reach</p>
+                        <p class="text-3xl font-black">
+                            {% set total_reach = namespace(value=0) %}
+                            {% for kol in influencers %}
+                            {% set total_reach.value = total_reach.value + (kol.followers_int or 0) %}
+                            {% endfor %}
+                            {% if total_reach.value > 1000000 %}
+                            {{ "%.1f"|format(total_reach.value / 1000000) }}M
+                            {% elif total_reach.value > 1000 %}
+                            {{ "%.1f"|format(total_reach.value / 1000) }}K
+                            {% else %}
+                            {{ total_reach.value }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-surface-dark p-6 rounded-xl border border-[#3c4753]/30">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-yellow-500/20 rounded-lg">
+                        <span class="material-symbols-outlined text-yellow-400 text-2xl">trending_up</span>
+                    </div>
+                    <div>
+                        <p class="text-[#9dabb8] text-sm">Avg. ER</p>
+                        <p class="text-3xl font-black text-green-400">
+                            {% if influencers|length > 0 %}
+                            {% set total_er = namespace(value=0) %}
+                            {% for kol in influencers %}
+                            {% set er_val = kol.er|replace('%', '')|float %}
+                            {% set total_er.value = total_er.value + er_val %}
+                            {% endfor %}
+                            {{ "%.1f"|format(total_er.value / influencers|length) }}%
+                            {% else %}
+                            0%
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="bg-surface-dark border border-[#3c4753]/30 rounded-2xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-[#111418] text-[#9dabb8] text-xs uppercase tracking-widest font-bold">
+                        <tr>
+                            <th class="px-8 py-5">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">person</span>
+                                    Influencer
+                                </div>
+                            </th>
+                            <th class="px-8 py-5">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">group</span>
+                                    Followers
+                                </div>
+                            </th>
+                            <th class="px-8 py-5">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                    Engagement
+                                </div>
+                            </th>
+                            <th class="px-8 py-5">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">language</span>
+                                    Platform
+                                </div>
+                            </th>
+                            <th class="px-8 py-5 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">settings</span>
+                                    Aksi
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#3c4753]/20">
+                        {% for kol in influencers %}
+                        <tr class="hover:bg-white/5 transition-colors group">
+
+                            <!-- Influencer Info -->
+                            <td class="px-8 py-5">
+                                <div class="flex items-center gap-4">
+                                    <img src="{{ kol.image }}"
+                                        class="size-12 rounded-full border border-[#3c4753] object-cover"
+                                        alt="{{ kol.name }}"
+                                        onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ kol.name|urlencode }}&background=random'" />
+                                    <div>
+                                        <div class="font-bold text-white">{{ kol.name }}</div>
+                                        <div class="text-xs text-[#9dabb8]">@{{ kol.username }}</div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Followers -->
+                            <td class="px-8 py-5">
+                                <span class="font-mono font-semibold text-white">{{ kol.followers }}</span>
+                            </td>
+
+                            <!-- Engagement Rate -->
+                            <td class="px-8 py-5">
+                                <span class="font-mono font-semibold text-green-400">{{ kol.er }}</span>
+                            </td>
+
+                            <!-- Platform -->
+                            <td class="px-8 py-5">
+                                <span
+                                    class="bg-primary/10 text-primary text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                                    {% if kol.platform %}{{ kol.platform }}{% else %}Instagram{% endif %}
+                                </span>
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="px-8 py-5">
+                                <div class="flex justify-end gap-2">
+                                    <a href="/influencer/{{ kol.username }}"
+                                        class="p-2 hover:bg-[#293038] rounded-lg text-[#9dabb8] hover:text-white transition-all"
+                                        title="View Profile">
+                                        <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                    </a>
+                                    <a href="https://instagram.com/{{ kol.username }}" target="_blank"
+                                        class="p-2 hover:bg-[#293038] rounded-lg text-[#9dabb8] hover:text-white transition-all"
+                                        title="Open Instagram">
+                                        <span class="material-symbols-outlined text-[20px]">open_in_new</span>
+                                    </a>
+                                    <a href="/remove_from_list/{{ kol.username }}"
+                                        class="p-2 hover:bg-red-500/10 rounded-lg text-[#9dabb8] hover:text-red-400 transition-all"
+                                        title="Remove from List"
+                                        onclick="return confirm('Hapus {{ kol.name }} dari daftar?')">
+                                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+
+                        <!-- Empty State -->
+                        <tr>
+                            <td colspan="5" class="px-8 py-20">
+                                <div class="flex flex-col items-center justify-center text-center">
+                                    <span
+                                        class="material-symbols-outlined text-[#9dabb8] text-6xl mb-4">bookmark_border</span>
+                                    <h3 class="text-white text-xl font-bold mb-2">Belum Ada Influencer Tersimpan</h3>
+                                    <p class="text-[#9dabb8] mb-6">Mulai tambahkan influencer favorit Anda dari halaman
+                                        Discovery</p>
+                                    <a href="/"
+                                        class="inline-flex items-center gap-2 bg-primary hover:bg-blue-600 px-6 py-3 rounded-xl font-bold transition-all">
+                                        <span class="material-symbols-outlined text-[20px]">search</span>
+                                        Mulai Pencarian
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Clear All Button -->
+        {% if influencers|length > 0 %}
+        <div class="mt-6 text-center">
+            <a href="/clear_list"
+                class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-semibold transition-all"
+                onclick="return confirm('Hapus semua influencer dari daftar?')">
+                <span class="material-symbols-outlined text-[20px]">delete_sweep</span>
+                Clear All List
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

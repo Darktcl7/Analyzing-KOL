@@ -1,0 +1,6 @@
+# KOL Scouting Project - Requirements for Production
+# Install dengan: pip install -r requirements.txt
+
+Flask>=2.0.0
+gunicorn>=21.0.0
+apify-client>=1.0.0

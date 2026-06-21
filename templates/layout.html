@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class="dark" lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>{% block title %}KOL Scout Dashboard{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Tailwind Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#197fe6",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111921",
+                        "surface-dark": "#1E2630",
+                        "surface-light": "#ffffff",
+                        "input-bg": "#293038",
+                        "border-dark": "#2d3748",
+                        "text-secondary": "#9dabb8"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    keyframes: {
+                        wiggle: {
+                            '0%, 100%': { transform: 'translate(-50%)' },
+                            '50%': { transform: 'translate(50%)' },
+                        }
+                    },
+                    animation: {
+                        wiggle: 'wiggle 2s ease-in-out infinite',
+                    }
+                },
+            },
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1E2630;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3c4753;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a5568;
+        }
+    </style>
+</head>
+
+<body class="bg-[#0B0F15] text-white font-display overflow-hidden">
+    <div class="relative flex h-screen w-full overflow-hidden">
+
+        <!-- Sidebar -->
+        <div class="hidden lg:flex w-[280px] flex-col border-r border-white/5 bg-[#0D1219]/90 backdrop-blur-md z-20">
+            <div class="flex h-full flex-col justify-between p-4">
+                <div class="flex flex-col gap-4">
+
+                    <!-- Logo & Brand -->
+                    <div class="flex gap-3 items-center mb-6">
+                        <div class="bg-center bg-no-repeat bg-cover rounded-full h-10 w-10 relative"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAxtXveP5Cw5eHgJ7RNCnkRlyriAweClhHubg1Ty6_R68r6wx5wOcAn-83ZVXaXlKPmGmI-RpmcTeC7eLNKINzeVToB86_K9xHeWTOchZ5IBwKkUeJUf8FULJq0OAOicnWY-EIKRTPlN3AiVJGUfpM9eN5Q8cI0ZUy6mtNL3gbSZOupqbLEHl9R8AdRNjGELMKK8I21gtoqr43STVNr71oAGmFbL9BwK7ItJPYLxZpZcaHmBHmJDZ-0oZ6xPCG38f1J2c3hRjoTpZg");'>
+                            <div
+                                class="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-[#111418]">
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <h1 class="text-white text-base font-bold">KOL Scout</h1>
+                            <p class="text-[#9dabb8] text-xs font-medium">Pro Plan • Agency</p>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Menu -->
+                    <div class="flex flex-col gap-2">
+                        <a href="/"
+                            class="flex items-center gap-3 px-3 py-2 {% if request.path == '/' %}bg-primary/20 text-primary{% else %}text-[#9dabb8] hover:text-white hover:bg-[#293038]{% endif %} rounded-lg transition-all">
+                            <span
+                                class="material-symbols-outlined {% if request.path == '/' %}fill{% endif %}">search</span>
+                            <p class="text-sm font-medium">Discovery</p>
+                        </a>
+
+                        <a href="/saved-lists"
+                            class="flex items-center gap-3 px-3 py-2 {% if request.path == '/saved-lists' %}bg-primary/20 text-primary{% else %}text-[#9dabb8] hover:text-white hover:bg-[#293038]{% endif %} rounded-lg transition-all">
+                            <span
+                                class="material-symbols-outlined {% if request.path == '/saved-lists' %}fill{% endif %}">bookmarks</span>
+                            <p class="text-sm font-medium">Saved Lists</p>
+                        </a>
+
+                        <!-- Admin Link -->
+                        {% if session.get('is_admin') %}
+                        <div class="mt-2 pt-2 border-t border-[#3c4753]/30">
+                            <a href="/admin"
+                                class="flex items-center gap-3 px-3 py-2 {% if request.path == '/admin' %}bg-amber-500/20 text-amber-400{% else %}text-amber-400/70 hover:text-amber-400 hover:bg-amber-500/10{% endif %} rounded-lg transition-all">
+                                <span class="material-symbols-outlined {% if request.path == '/admin' %}fill{% endif %}">admin_panel_settings</span>
+                                <p class="text-sm font-medium">Admin Panel</p>
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="mt-2 pt-2 border-t border-[#3c4753]/30">
+                            <a href="/login"
+                                class="flex items-center gap-3 px-3 py-2 text-[#9dabb8] hover:text-white hover:bg-[#293038] rounded-lg transition-all">
+                                <span class="material-symbols-outlined">lock</span>
+                                <p class="text-sm font-medium">Admin Login</p>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Footer Info -->
+                <div class="mt-auto pt-4 border-t border-[#3c4753]/30">
+                    <p class="text-xs text-[#9dabb8] text-center">© 2024 KOL Scout</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col h-full overflow-hidden">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

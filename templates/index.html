@@ -1,0 +1,352 @@
+{% extends "layout.html" %}
+
+{% block title %}Discovery - KOL Scout{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const provinceSelect = document.getElementById('province-select');
+    const citySelect = document.getElementById('city-select');
+    const districtSelect = document.getElementById('district-select');
+
+    // Store all regions data from server
+    const regionsData = {{ regions| tojson | safe
+  }};
+  const currentProvince = "{{ f.province or '' }}";
+  const currentCity = "{{ f.city or '' }}";
+  const currentDistrict = "{{ f.district or '' }}";
+
+  // Update City dropdown when Province changes
+  function updateCities() {
+    const selectedProvince = provinceSelect.value;
+    citySelect.innerHTML = '<option value="">Semua Kota/Kabupaten</option>';
+    districtSelect.innerHTML = '<option value="">Semua Kecamatan</option>';
+
+    if (!selectedProvince) return;
+
+    // Find the selected province
+    const province = regionsData.provinces.find(p => p.name === selectedProvince);
+    if (province && province.cities) {
+      province.cities.forEach(city => {
+        const opt = document.createElement('option');
+        opt.value = city.name;
+        opt.textContent = city.name;
+        if (city.name.toLowerCase() === currentCity.toLowerCase()) {
+          opt.selected = true;
+        }
+        citySelect.appendChild(opt);
+      });
+    }
+
+    // If city was pre-selected, load its districts
+    if (citySelect.value) {
+      updateDistricts();
+    }
+  }
+
+  // Update District dropdown when City changes
+  async function updateDistricts() {
+    const selectedCity = citySelect.value;
+    districtSelect.innerHTML = '<option value="">Semua Kecamatan</option>';
+
+    if (!selectedCity) return;
+
+    try {
+      districtSelect.innerHTML = '<option value="">Loading...</option>';
+      const response = await fetch(`/api/districts/${encodeURIComponent(selectedCity)}`);
+      const data = await response.json();
+
+      districtSelect.innerHTML = '<option value="">Semua Kecamatan</option>';
+      if (data.districts && data.districts.length > 0) {
+        data.districts.forEach(dist => {
+          const opt = document.createElement('option');
+          const name = typeof dist === 'string' ? dist : dist.name;
+          if (name) {
+            opt.value = name.toLowerCase();
+            opt.textContent = name;
+            if (opt.value === currentDistrict.toLowerCase()) {
+              opt.selected = true;
+            }
+            districtSelect.appendChild(opt);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching districts:', error);
+      districtSelect.innerHTML = '<option value="">Error loading</option>';
+    }
+  }
+
+  // Event listeners
+  provinceSelect.addEventListener('change', updateCities);
+  citySelect.addEventListener('change', updateDistricts);
+
+  // Initial load - restore previous selections
+  if (provinceSelect.value) {
+    updateCities();
+  }
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="flex-1 overflow-y-auto">
+  <div class="max-w-[1400px] mx-auto w-full p-6 md:p-8">
+
+    <!-- Header Section -->
+    <div class="flex flex-col gap-2 mb-8 relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold rounded-full w-fit mb-1 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+        </span>
+        Malang Exclusive
+      </div>
+      <h1 class="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-[#9dabb8] text-4xl md:text-5xl font-black tracking-tight drop-shadow-sm">Malang KOL Scout</h1>
+      <p class="text-[#9dabb8] text-lg font-light">Pusat Database Influencer, Mahasiswa, & Lifestyle di Malang Raya.</p>
+    </div>
+
+    <!-- Unified Search & Filter Form -->
+    <form method="POST" action="/"
+      class="relative bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 md:p-8 shadow-2xl flex flex-col gap-6 overflow-hidden">
+      <!-- Glow effect -->
+      <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-600/20 rounded-full blur-[80px] pointer-events-none"></div>
+
+      <!-- Platform & Search Row -->
+      <div class="flex flex-col lg:flex-row gap-4">
+
+        <!-- Platform Selector -->
+        <div class="bg-input-bg rounded-lg p-1 flex shrink-0 h-12 w-full lg:w-auto min-w-[240px]">
+          <label
+            class="flex-1 cursor-pointer flex items-center justify-center gap-2 rounded-md has-[:checked]:bg-[#111418] text-white transition-all">
+            <input {% if f.platform=='instagram' %}checked{% endif %} class="hidden" name="platform" type="radio"
+              value="instagram" />
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+            <span class="text-sm font-bold">Instagram</span>
+          </label>
+        </div>
+
+        <!-- Search Input -->
+        <div
+          class="flex-1 flex bg-input-bg rounded-lg h-12 border border-transparent focus-within:border-primary/50 transition-all">
+          <div class="flex items-center pl-4 text-[#9dabb8]">
+            <span class="text-xl font-bold">#</span>
+          </div>
+          <input name="search_keyword"
+            class="bg-transparent border-none text-white w-full h-full px-3 focus:ring-0 focus:outline-none"
+            placeholder="Search keywords (e.g. food, beauty, travel)..." type="text" value="{{ f.query or '' }}" />
+          <div class="flex items-center pr-4 text-[#9dabb8]">
+            <span class="material-symbols-outlined">search</span>
+          </div>
+        </div>
+
+        <!-- Search Button -->
+        <button type="submit" id="search-btn"
+          class="bg-primary hover:bg-blue-600 text-white px-8 rounded-lg font-bold transition-all hover:shadow-lg hover:shadow-primary/20">
+          Search
+        </button>
+      </div>
+
+      <!-- Loading Overlay (Hidden by default) -->
+      <div id="loading-overlay"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center">
+        <div
+          class="bg-[#1E2630] p-8 rounded-2xl border border-[#3c4753] flex flex-col items-center max-w-md text-center shadow-2xl">
+          <div class="relative w-20 h-20 mb-6">
+            <div class="absolute inset-0 border-4 border-primary/30 rounded-full animate-ping"></div>
+            <div
+              class="absolute inset-0 border-4 border-t-primary border-r-primary border-b-transparent border-l-transparent rounded-full animate-spin">
+            </div>
+            <span
+              class="material-symbols-outlined absolute inset-0 flex items-center justify-center text-white text-3xl">smart_toy</span>
+          </div>
+          <h3 class="text-white text-xl font-bold mb-2">Agen Sedang Bekerja...</h3>
+          <p class="text-[#9dabb8] mb-6">Kami sedang mencari di database lokal & menyisir Instagram untuk menemukan KOL
+            terbaik.</p>
+
+          <div class="w-full bg-[#111418] rounded-full h-2 overflow-hidden">
+            <div class="h-full bg-primary animate-[wiggle_2s_infinite]" style="width: 60%"></div>
+          </div>
+          <p class="text-xs text-[#9dabb8] mt-2">Mohon tunggu hingga 1-2 menit jika data belum ada.</p>
+        </div>
+      </div>
+
+      <script>
+        document.querySelector('form').addEventListener('submit', function () {
+          const overlay = document.getElementById('loading-overlay');
+          overlay.classList.remove('hidden');
+          
+          const title = overlay.querySelector('h3');
+          const desc = overlay.querySelector('p');
+          title.textContent = "Mencari di Database Lokal...";
+          desc.textContent = "Sedang mengambil data KOL Malang terbaik untuk Anda.";
+        });
+      </script>
+
+      <!-- Advanced Filters Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 relative z-10 pt-4 border-t border-white/5">
+        
+        <input type="hidden" name="city" value="malang" />
+        <input type="hidden" name="province" value="jawa timur" />
+
+        <!-- Followers Min -->
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Minimal Followers</label>
+          <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">group</span>
+            <input name="min_followers" class="bg-black/30 border border-white/5 rounded-xl pl-10 pr-3 py-3 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
+              placeholder="Min" value="{{ f.min_fol or '' }}" />
+          </div>
+        </div>
+
+        <!-- Followers Max -->
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Maksimal Followers</label>
+          <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">group</span>
+            <input name="max_followers" class="bg-black/30 border border-white/5 rounded-xl pl-10 pr-3 py-3 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
+              placeholder="Max" value="{{ f.max_fol or '' }}" />
+          </div>
+        </div>
+
+        <!-- Engagement Rate Filter -->
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Minimal ER</label>
+          <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-green-400/80 group-focus-within:text-green-400 transition-colors material-symbols-outlined text-[18px]">trending_up</span>
+            <select name="er_rate" class="w-full bg-black/30 border border-white/5 rounded-xl pl-10 pr-3 py-3 text-white text-sm appearance-none focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner">
+              <option value="0" {% if f.er_min=='0' %}selected{% endif %} class="bg-[#1E2630] py-2">Semua ER</option>
+              <option value="2" {% if f.er_min=='2' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 2% (Active)</option>
+              <option value="5" {% if f.er_min=='5' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 5% (High)</option>
+              <option value="10" {% if f.er_min=='10' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 10% (Viral)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Niche Tags Filter -->
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Kategori / Niche</label>
+          <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-purple-400/80 group-focus-within:text-purple-400 font-bold transition-colors">#</span>
+            <input name="niche_tags" class="bg-black/30 border border-white/5 rounded-xl pl-8 pr-3 py-3 text-white text-sm w-full focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none shadow-inner"
+              placeholder="food, beauty..." value="{{ f.niche_tags or '' }}" />
+          </div>
+        </div>
+
+        <!-- Sort By Filter -->
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Urutkan</label>
+          <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400/80 group-focus-within:text-blue-400 transition-colors material-symbols-outlined text-[18px]">sort</span>
+            <select name="sort_by" class="w-full bg-black/30 border border-white/5 rounded-xl pl-10 pr-3 py-3 text-white text-sm appearance-none focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner">
+              <option value="" {% if not f.sort_by %}selected{% endif %} class="bg-[#1E2630] py-2">Acak (Default)</option>
+              <option value="followers_desc" {% if f.sort_by=='followers_desc' %}selected{% endif %} class="bg-[#1E2630] py-2">Followers Terbanyak</option>
+              <option value="followers_asc" {% if f.sort_by=='followers_asc' %}selected{% endif %} class="bg-[#1E2630] py-2">Followers Paling Sedikit</option>
+              <option value="er_desc" {% if f.sort_by=='er_desc' %}selected{% endif %} class="bg-[#1E2630] py-2">ER Tertinggi</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+    {% if not search_performed %}
+    <!-- Unified Welcome State -->
+    <div class="flex flex-col items-center justify-center py-24 text-center">
+      <div class="bg-gradient-to-br from-purple-500/10 to-blue-500/10 p-8 rounded-full mb-6">
+        <span class="material-symbols-outlined text-[64px] text-white/50">auto_awesome</span>
+      </div>
+      <h3 class="text-white text-3xl font-bold mb-3">Mulai Pencarian Cerdas</h3>
+      <p class="text-[#9dabb8] max-w-lg text-lg mb-8">
+        Ketik keyword di atas. Sistem kami akan menampilkan database KOL Malang terbaik secara instan.
+      </p>
+    </div>
+
+    {% elif influencers|length == 0 %}
+    <!-- No Results State -->
+    <div class="flex flex-col items-center justify-center py-16 text-center">
+      <span class="material-symbols-outlined text-[60px] text-[#3c4753] mb-4">search_off</span>
+      <h3 class="text-white text-xl font-bold mb-2">Tidak Ditemukan</h3>
+      <p class="text-[#9dabb8] max-w-md mb-4">
+        Kami sudah mencari di database lokal, namun hasilnya nihil.
+      </p>
+      <button onclick="window.history.back()" class="text-primary hover:underline">
+        Coba keyword lain
+      </button>
+    </div>
+    {% else %}
+    <!-- Results Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10">
+      {% for kol in influencers %}
+      <div
+        class="bg-[#1E2630] rounded-xl p-5 border border-[#3c4753]/30 hover:border-primary/50 transition-all flex flex-col gap-4">
+
+        <!-- Profile Header -->
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <img src="{% if kol.image and kol.image.startswith('/static/') %}{{ kol.image }}{% elif kol.image and kol.image.startswith('static/') %}/{{ kol.image }}{% elif kol.image %}https://wsrv.nl/?url={{ kol.image|urlencode }}&w=100&h=100{% else %}https://ui-avatars.com/api/?name={{ kol.name|urlencode }}&background=1E2630&color=fff{% endif %}"
+              class="size-14 rounded-full border-2 border-primary/20 object-cover" alt="{{ kol.name }}"
+              onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ kol.name|urlencode }}&background=1E2630&color=fff'" />
+            <div
+              class="absolute -bottom-1 -right-1 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 rounded-full p-1">
+              <svg class="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="text-white font-bold truncate">{{ kol.name }}</h3>
+            <p class="text-[#9dabb8] text-xs truncate">@{{ kol.username }}</p>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="flex flex-wrap gap-1.5 h-6 overflow-hidden">
+          {% for tag in kol.tags %}
+          <span class="inline-flex items-center gap-1 bg-[#293038] px-2 py-1 rounded text-[10px] text-[#9dabb8]">
+            <span class="text-primary font-bold">#</span>{{ tag }}
+          </span>
+          {% endfor %}
+        </div>
+
+        <!-- Location -->
+        <div class="flex items-center gap-2 bg-[#111418] rounded-lg p-2">
+          <span class="material-symbols-outlined text-primary text-[16px]">location_on</span>
+          <span class="text-white text-sm font-medium truncate">{{ kol.location or 'Unknown' }}</span>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-[#111418] rounded p-2 flex flex-col">
+            <span class="text-[#9dabb8] text-[10px] uppercase font-bold">Followers</span>
+            <span class="text-white font-mono font-medium text-sm">{{ kol.followers }}</span>
+          </div>
+          <div class="bg-[#111418] rounded p-2 flex flex-col">
+            <span class="text-[#9dabb8] text-[10px] uppercase font-bold">ER</span>
+            <span class="text-green-400 font-mono font-medium text-sm">{{ kol.er }}</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2 mt-auto">
+          <a href="/add_to_list/{{ kol.username }}"
+            class="flex-1 bg-primary text-white py-2 rounded-lg text-sm font-medium text-center hover:bg-blue-600 transition-all">Add
+            to List</a>
+          <a href="/influencer/{{ kol.username }}"
+            class="p-2 bg-[#36404a] text-white rounded-lg inline-flex items-center hover:bg-[#3c4753] transition-all">
+            <span class="material-symbols-outlined text-[20px]">visibility</span>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
