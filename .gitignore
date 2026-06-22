@@ -21,7 +21,7 @@ scratch/
 Thumbs.db
 
 # Databases & Media
-kol_scout.db
+kol_scout.db*
 static/profiles/
 influencers_backup_*.json
 

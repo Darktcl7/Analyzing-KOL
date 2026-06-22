@@ -5,10 +5,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 DB_FILE = 'kol_scout.db'
 
 def get_db():
-    conn = sqlite3.connect(DB_FILE)
+    conn = sqlite3.connect(DB_FILE, timeout=30.0)
     conn.row_factory = sqlite3.Row
-    # Enable foreign keys
+    # Enable foreign keys and WAL mode for concurrency
     conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA journal_mode = WAL")
     return conn
 
 def init_db():
