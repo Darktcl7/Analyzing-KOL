@@ -40,11 +40,21 @@
 
                     <!-- Action Buttons -->
                     <div class="flex gap-3 justify-center md:justify-start">
+                        {% if saved_usernames and kol.username in saved_usernames %}
+                        <a href="/remove_from_list/{{ kol.username }}"
+                            class="inline-flex items-center gap-2 bg-green-600/20 text-green-400 border border-green-500/30 hover:bg-red-600/20 hover:text-red-400 hover:border-red-500/30 px-8 py-3 rounded-xl font-bold transition-all group">
+                            <span class="material-symbols-outlined text-[20px] group-hover:hidden">check_circle</span>
+                            <span class="material-symbols-outlined text-[20px] hidden group-hover:inline">cancel</span>
+                            <span class="group-hover:hidden">Ditambahkan ke Daftar</span>
+                            <span class="hidden group-hover:inline">Hapus dari Daftar</span>
+                        </a>
+                        {% else %}
                         <a href="/add_to_list/{{ kol.username }}"
                             class="inline-flex items-center gap-2 bg-primary hover:bg-blue-600 px-8 py-3 rounded-xl font-bold transition-all">
                             <span class="material-symbols-outlined text-[20px]">bookmark_add</span>
                             Tambahkan ke Daftar
                         </a>
+                        {% endif %}
                         <a href="https://instagram.com/{{ kol.username }}" target="_blank"
                             class="inline-flex items-center gap-2 bg-[#293038] hover:bg-[#36404a] px-6 py-3 rounded-xl font-bold transition-all">
                             <span class="material-symbols-outlined text-[20px]">open_in_new</span>
@@ -132,11 +142,15 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-[#9dabb8] text-sm">Account Type</span>
-                        <span class="text-white font-semibold">Creator</span>
+                        <span class="text-white font-semibold">{{ kol.account_type or 'Personal' }}</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-[#9dabb8] text-sm">Verified</span>
-                        <span class="text-green-400 font-semibold">✓ Yes</span>
+                        {% if kol.is_verified %}
+                            <span class="text-green-400 font-semibold">✓ Yes</span>
+                        {% else %}
+                            <span class="text-red-400/80 font-semibold">No</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -148,10 +162,39 @@
                     <h3 class="text-lg font-bold">Contact Info</h3>
                 </div>
                 <div class="space-y-3">
+                    {% if kol.email %}
                     <div class="flex justify-between items-center">
                         <span class="text-[#9dabb8] text-sm">Email</span>
                         <span class="text-white font-semibold text-sm">
-                            {% if kol.email %}{{ kol.email }}{% else %}contact@example.com{% endif %}
+                            <a href="mailto:{{ kol.email }}" class="text-primary hover:underline inline-flex items-center gap-1">
+                                {{ kol.email }}
+                                <span class="material-symbols-outlined text-[14px]">mail</span>
+                            </a>
+                        </span>
+                    </div>
+                    {% endif %}
+                    {% if kol.phone %}
+                    <div class="flex justify-between items-center">
+                        <span class="text-[#9dabb8] text-sm">WhatsApp / Phone</span>
+                        <span class="text-white font-semibold text-sm">
+                            {% set clean_phone = kol.phone|replace('+', '')|replace('-', '')|replace(' ', '') %}
+                            {% if clean_phone.startswith('08') %}
+                                {% set clean_phone = '628' ~ clean_phone[2:] %}
+                            {% endif %}
+                            <a href="https://wa.me/{{ clean_phone }}" target="_blank" class="text-primary hover:underline inline-flex items-center gap-1">
+                                {{ kol.phone }}
+                                <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                            </a>
+                        </span>
+                    </div>
+                    {% endif %}
+                    <div class="flex justify-between items-center">
+                        <span class="text-[#9dabb8] text-sm">Instagram DM</span>
+                        <span class="text-white font-semibold text-sm">
+                            <a href="https://ig.me/m/{{ kol.username|replace('@','') }}" target="_blank" class="text-primary hover:underline inline-flex items-center gap-1">
+                                @{{ kol.username|replace('@','') }}
+                                <span class="material-symbols-outlined text-[14px]">chat</span>
+                            </a>
                         </span>
                     </div>
                     <div class="flex justify-between items-center">

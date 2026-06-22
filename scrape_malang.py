@@ -23,20 +23,39 @@ def scrape_malang_detail():
         # Niche Kuliner / F&B Malang
         "kulinermalang", "malangfoodies", "cafemalang", "malangculinary", "malanghits",
         
-        # Niche Kuliner / F&B Batu
+        # Niche Kuliner / F&B Batu & Sekitar
         "kulinerbatu", "explorebatu", "cafebatu", "batuculinary", "batufoodies",
         
-        # Niche Pariwisata & Alam Malang & Batu
+        # Niche Pariwisata & Alam Malang, Batu, Bromo
         "exploremalang", "yoikimalang", "amazingmalang", "wisatamalang", "wisatabatu", "kotawisatabatu", "batuhits",
+        "explorebromo", "wisatabromo", "bromotrip",
         
         # Niche Mahasiswa & Anak Muda Malang
         "mahasiswamalang", "kampusmalang", "infomalang", "mahasiswaub", "mahasiswaum", "mahasiswaumm", "mabaub", "mabaumm",
         
+        # Niche Pendidikan, Buku, & Alat Tulis Malang
+        "pendidikanmalang", "bukumalang", "alattulismalang", "tokobukumalang", "pelajarmalang", "sekolahmalang", "perpustakaanmalang", "stationerymalang",
+        
+        # Niche Teknologi & IT Malang
+        "teknologimalang", "gadgetmalang", "komputermalang", "servicelaptopmalang", "servishpmalang", "iphonemalang", "codingmalang", "itmalang",
+        
+        # Niche Bisnis & Pemasaran Malang
+        "bisnismalang", "umkmmalang", "pengusahamalang", "marketingmalang",
+        
+        # Niche Kesehatan Malang
+        "kesehatanmalang", "doktermalang", "klinikmalang",
+        
+        # Niche Seni, Musik, & Fotografi Malang
+        "senimalang", "musikmalang", "bandmalang", "fotografimalang", "jasafotomalang", "preweddingmalang",
+        
+        # Niche Otomotif Malang
+        "otomotifmalang", "mobilmalang", "motormalang",
+        
         # Niche Beauty & Fashion Malang & Batu
         "muamalang", "malangbeauty", "ootdmalang", "muabatu",
         
-        # Niche Event & Lifestyle Malang
-        "eventmalang", "malangapik", "infobatu"
+        # Niche Event & Lifestyle Malang, Batu, Kepanjen
+        "eventmalang", "malangapik", "infobatu", "kepanjen", "explorekepanjen", "kepanjenhits", "kulinerkepanjen"
     ]
     
     # Konfigurasi Skala Besar

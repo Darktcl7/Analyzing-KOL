@@ -19,3 +19,10 @@ scratch/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Databases & Media
+kol_scout.db
+static/profiles/
+influencers_backup_*.json
+
+

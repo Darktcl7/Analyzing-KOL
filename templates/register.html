@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 
-{% block title %}Masuk - KOL Scout{% endblock %}
+{% block title %}Daftar Akun - KOL Scout{% endblock %}
 
 {% block content %}
 <div class="flex-1 overflow-y-auto flex items-center justify-center">
   <div class="w-full max-w-md p-6">
 
-    <!-- Login Card -->
+    <!-- Register Card -->
     <div class="relative bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl overflow-hidden">
       <!-- Glow Effects -->
       <div class="absolute -top-32 -right-32 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none"></div>
@@ -15,10 +15,10 @@
       <!-- Header -->
       <div class="relative z-10 text-center mb-8">
         <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl border border-white/10 mb-4">
-          <span class="material-symbols-outlined text-[32px] text-primary">login</span>
+          <span class="material-symbols-outlined text-[32px] text-primary">person_add</span>
         </div>
-        <h1 class="text-white text-2xl font-bold mb-1">Masuk ke KOL Scout</h1>
-        <p class="text-[#9dabb8] text-sm">Masuk untuk mengelola campaign dan daftar KOL Anda.</p>
+        <h1 class="text-white text-2xl font-bold mb-1">Daftar Akun</h1>
+        <p class="text-[#9dabb8] text-sm">Buat akun untuk mulai mengelola daftar KOL Anda secara efisien.</p>
       </div>
 
       <!-- Error / Success Messages -->
@@ -28,26 +28,16 @@
         <p class="text-red-400 text-sm font-medium">{{ error }}</p>
       </div>
       {% endif %}
-      
-      {% if success %}
-      <div class="relative z-10 bg-green-500/10 border border-green-500/30 rounded-xl px-4 py-3 mb-6 flex items-center gap-3">
-        <span class="material-symbols-outlined text-green-400 text-[20px]">check_circle</span>
-        <p class="text-green-400 text-sm font-medium">{{ success }}</p>
-      </div>
-      {% endif %}
 
-      <!-- Login Form -->
-      <form method="POST" action="/login" class="relative z-10 flex flex-col gap-5">
-        <!-- Hidden redirect field if present in URL -->
-        <input type="hidden" name="next" value="{{ next_url or '' }}" />
-
+      <!-- Register Form -->
+      <form method="POST" action="/register" class="relative z-10 flex flex-col gap-5" onsubmit="return validateForm()">
         <div class="flex flex-col gap-2">
           <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Username</label>
           <div class="relative group">
             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">person</span>
             <input name="username" type="text" required autofocus value="{{ username_val or '' }}"
               class="bg-black/30 border border-white/5 rounded-xl pl-10 pr-4 py-3.5 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
-              placeholder="Masukkan username Anda..." />
+              placeholder="Pilih username Anda..." />
           </div>
         </div>
 
@@ -55,10 +45,24 @@
           <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Password</label>
           <div class="relative group">
             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">lock</span>
-            <input name="password" type="password" required
+            <input id="password" name="password" type="password" required
               class="bg-black/30 border border-white/5 rounded-xl pl-10 pr-12 py-3.5 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
-              placeholder="Masukkan password Anda..." />
-            <button type="button" onclick="togglePassword(this)"
+              placeholder="Buat password minimal 6 karakter..." />
+            <button type="button" onclick="togglePassword('password', this)"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-[#9dabb8] hover:text-white transition-colors">
+              <span class="material-symbols-outlined text-[18px]">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Konfirmasi Password</label>
+          <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">lock</span>
+            <input id="confirm_password" name="confirm_password" type="password" required
+              class="bg-black/30 border border-white/5 rounded-xl pl-10 pr-12 py-3.5 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
+              placeholder="Ulangi password Anda..." />
+            <button type="button" onclick="togglePassword('confirm_password', this)"
               class="absolute right-3 top-1/2 -translate-y-1/2 text-[#9dabb8] hover:text-white transition-colors">
               <span class="material-symbols-outlined text-[18px]">visibility</span>
             </button>
@@ -67,16 +71,16 @@
 
         <button type="submit"
           class="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3.5 rounded-xl font-bold transition-all hover:shadow-lg hover:shadow-primary/30 flex items-center justify-center gap-2">
-          <span class="material-symbols-outlined text-[20px]">login</span>
-          Masuk Sekarang
+          <span class="material-symbols-outlined text-[20px]">person_add</span>
+          Daftar Sekarang
         </button>
       </form>
 
       <!-- Toggle Links -->
       <div class="relative z-10 mt-6 text-center flex flex-col gap-3">
         <p class="text-sm text-[#9dabb8]">
-          Belum punya akun? 
-          <a href="/register" class="text-primary hover:underline font-semibold">Daftar Akun Baru</a>
+          Sudah punya akun? 
+          <a href="/login" class="text-primary hover:underline font-semibold">Masuk di sini</a>
         </p>
         <a href="/" class="text-[#9dabb8] hover:text-white text-sm transition-colors inline-flex items-center justify-center gap-1">
           <span class="material-symbols-outlined text-[16px]">arrow_back</span>
@@ -88,8 +92,8 @@
 </div>
 
 <script>
-  function togglePassword(btn) {
-    const input = btn.parentElement.querySelector('input');
+  function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
     const icon = btn.querySelector('.material-symbols-outlined');
     if (input.type === 'password') {
       input.type = 'text';
@@ -98,6 +102,20 @@
       input.type = 'password';
       icon.textContent = 'visibility';
     }
+  }
+
+  function validateForm() {
+    const pwd = document.getElementById('password').value;
+    const confirmPwd = document.getElementById('confirm_password').value;
+    if (pwd.length < 6) {
+      alert("Password minimal harus 6 karakter.");
+      return false;
+    }
+    if (pwd !== confirmPwd) {
+      alert("Konfirmasi password tidak cocok.");
+      return false;
+    }
+    return true;
   }
 </script>
 {% endblock %}
