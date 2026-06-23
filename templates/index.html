@@ -91,24 +91,24 @@
 
 {% block content %}
 <div class="flex-1 overflow-y-auto">
-  <div class="max-w-[1400px] mx-auto w-full p-6 md:p-8">
+  <div class="max-w-[1400px] mx-auto w-full p-4 md:p-8">
 
     <!-- Header Section -->
-    <div class="flex flex-col gap-2 mb-8 relative z-10">
-      <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold rounded-full w-fit mb-1 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+    <div class="flex flex-col gap-1 md:gap-2 mb-4 md:mb-8 relative z-10">
+      <div class="hidden md:inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold rounded-full w-fit mb-1 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
         </span>
         Malang Exclusive
       </div>
-      <h1 class="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-[#9dabb8] text-4xl md:text-5xl font-black tracking-tight drop-shadow-sm">Malang KOL Scout</h1>
-      <p class="text-[#9dabb8] text-lg font-light">Pusat Database Influencer, Mahasiswa, & Lifestyle di Malang Raya.</p>
+      <h1 class="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-[#9dabb8] text-2xl md:text-5xl font-black tracking-tight drop-shadow-sm">Malang KOL Scout</h1>
+      <p class="text-[#9dabb8] text-sm md:text-lg font-light">Pusat Database Influencer & Lifestyle Malang Raya.</p>
     </div>
 
     <!-- Unified Search & Filter Form -->
     <form method="GET" action="/" id="search-form"
-      class="relative bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 md:p-8 shadow-2xl flex flex-col gap-6 overflow-hidden">
+      class="relative bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-4 md:p-8 shadow-2xl flex flex-col gap-4 md:gap-6 overflow-hidden">
       <input type="hidden" name="page" id="page_input" value="{{ pagination.page if pagination else 1 }}" />
       <!-- Glow effect -->
       <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none"></div>
@@ -188,70 +188,93 @@
         });
       </script>
 
+      <!-- Filter Toggle Button (Mobile) -->
+      <button type="button" onclick="toggleFilters()" class="md:hidden flex items-center justify-between w-full text-[#9dabb8] text-sm font-bold pt-2 border-t border-white/5">
+        <span class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">tune</span>
+          Filter & Urutkan
+        </span>
+        <span class="material-symbols-outlined text-[18px] transition-transform" id="filter-chevron">expand_more</span>
+      </button>
+
       <!-- Advanced Filters Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 relative z-10 pt-4 border-t border-white/5">
+      <div id="filters-panel" class="hidden md:grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-6 relative z-10 pt-2 md:pt-4 border-t border-white/5 md:border-t">
 
         <!-- Followers Min -->
-        <div class="flex flex-col gap-2">
-          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Minimal Followers</label>
+        <div class="flex flex-col gap-1">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Min Followers</label>
           <div class="relative group">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">group</span>
-            <input name="min_followers" class="bg-black/30 border border-white/5 rounded-xl pl-10 pr-3 py-3 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
+            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[16px] md:text-[18px]">group</span>
+            <input name="min_followers" class="bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-8 md:pl-10 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
               placeholder="Min" value="{{ f.min_fol or '' }}" />
           </div>
         </div>
 
         <!-- Followers Max -->
-        <div class="flex flex-col gap-2">
-          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Maksimal Followers</label>
+        <div class="flex flex-col gap-1">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Max Followers</label>
           <div class="relative group">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">group</span>
-            <input name="max_followers" class="bg-black/30 border border-white/5 rounded-xl pl-10 pr-3 py-3 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
+            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[16px] md:text-[18px]">group</span>
+            <input name="max_followers" class="bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-8 md:pl-10 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
               placeholder="Max" value="{{ f.max_fol or '' }}" />
           </div>
         </div>
 
         <!-- Engagement Rate Filter -->
-        <div class="flex flex-col gap-2">
-          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Minimal ER</label>
+        <div class="flex flex-col gap-1">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Minimal ER</label>
           <div class="relative group">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-green-400/80 group-focus-within:text-green-400 transition-colors material-symbols-outlined text-[18px]">trending_up</span>
-            <select name="er_rate" class="w-full bg-black/30 border border-white/5 rounded-xl pl-10 pr-3 py-3 text-white text-sm appearance-none focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner">
+            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-green-400/80 group-focus-within:text-green-400 transition-colors material-symbols-outlined text-[16px] md:text-[18px]">trending_up</span>
+            <select name="er_rate" class="w-full bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-8 md:pl-10 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm appearance-none focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner">
               <option value="0" {% if f.er_min=='0' %}selected{% endif %} class="bg-[#1E2630] py-2">Semua ER</option>
-              <option value="2" {% if f.er_min=='2' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 2% (Active)</option>
-              <option value="5" {% if f.er_min=='5' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 5% (High)</option>
-              <option value="10" {% if f.er_min=='10' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 10% (Viral)</option>
+              <option value="2" {% if f.er_min=='2' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 2%</option>
+              <option value="5" {% if f.er_min=='5' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 5%</option>
+              <option value="10" {% if f.er_min=='10' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 10%</option>
             </select>
           </div>
         </div>
 
         <!-- Niche Tags Filter -->
-        <div class="flex flex-col gap-2">
-          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Kategori / Niche</label>
+        <div class="flex flex-col gap-1">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Niche</label>
           <div class="relative group">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-purple-400/80 group-focus-within:text-purple-400 font-bold transition-colors">#</span>
-            <input name="niche_tags" class="bg-black/30 border border-white/5 rounded-xl pl-8 pr-3 py-3 text-white text-sm w-full focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none shadow-inner"
+            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-purple-400/80 group-focus-within:text-purple-400 font-bold transition-colors text-sm">#</span>
+            <input name="niche_tags" class="bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-7 md:pl-8 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm w-full focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none shadow-inner"
               placeholder="food, beauty..." value="{{ f.niche_tags or '' }}" />
           </div>
         </div>
 
-
-
         <!-- Sort By Filter -->
-        <div class="flex flex-col gap-2">
-          <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Urutkan</label>
+        <div class="flex flex-col gap-1 col-span-2 md:col-span-1">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Urutkan</label>
           <div class="relative group">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400/80 group-focus-within:text-blue-400 transition-colors material-symbols-outlined text-[18px]">sort</span>
-            <select name="sort_by" class="w-full bg-black/30 border border-white/5 rounded-xl pl-10 pr-3 py-3 text-white text-sm appearance-none focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner">
+            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-blue-400/80 group-focus-within:text-blue-400 transition-colors material-symbols-outlined text-[16px] md:text-[18px]">sort</span>
+            <select name="sort_by" class="w-full bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-8 md:pl-10 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm appearance-none focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner">
               <option value="" {% if not f.sort_by %}selected{% endif %} class="bg-[#1E2630] py-2">Acak (Default)</option>
-              <option value="followers_desc" {% if f.sort_by=='followers_desc' %}selected{% endif %} class="bg-[#1E2630] py-2">Followers Terbanyak</option>
-              <option value="followers_asc" {% if f.sort_by=='followers_asc' %}selected{% endif %} class="bg-[#1E2630] py-2">Followers Paling Sedikit</option>
+              <option value="followers_desc" {% if f.sort_by=='followers_desc' %}selected{% endif %} class="bg-[#1E2630] py-2">Followers ↓</option>
+              <option value="followers_asc" {% if f.sort_by=='followers_asc' %}selected{% endif %} class="bg-[#1E2630] py-2">Followers ↑</option>
               <option value="er_desc" {% if f.sort_by=='er_desc' %}selected{% endif %} class="bg-[#1E2630] py-2">ER Tertinggi</option>
             </select>
           </div>
         </div>
 
       </div>
+
+      <script>
+        function toggleFilters() {
+          const panel = document.getElementById('filters-panel');
+          const chevron = document.getElementById('filter-chevron');
+          if (panel.classList.contains('hidden')) {
+            panel.classList.remove('hidden');
+            panel.classList.add('grid');
+            chevron.style.transform = 'rotate(180deg)';
+          } else {
+            panel.classList.add('hidden');
+            panel.classList.remove('grid');
+            chevron.style.transform = 'rotate(0deg)';
+          }
+        }
+      </script>
     </form>
 
     {% if not search_performed %}
@@ -280,33 +303,33 @@
     </div>
     {% else %}
     <!-- Results Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10">
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 mt-6 md:mt-10">
       {% for kol in influencers %}
       <div
-        class="bg-[#1E2630] rounded-xl p-5 border border-[#3c4753]/30 hover:border-primary/50 transition-all flex flex-col gap-4">
+        class="bg-[#1E2630] rounded-xl p-3 md:p-5 border border-[#3c4753]/30 hover:border-primary/50 transition-all flex flex-col gap-2 md:gap-4">
 
         <!-- Profile Header -->
-        <div class="flex items-center gap-4">
-          <div class="relative">
+        <div class="flex items-center gap-2 md:gap-4">
+          <div class="relative shrink-0">
             <img src="{% if kol.image and kol.image.startswith('/static/') %}{{ kol.image }}{% elif kol.image and kol.image.startswith('static/') %}/{{ kol.image }}{% elif kol.image %}https://wsrv.nl/?url={{ kol.image|urlencode }}&w=100&h=100{% else %}https://ui-avatars.com/api/?name={{ kol.name|urlencode }}&background=1E2630&color=fff{% endif %}"
-              class="size-14 rounded-full border-2 border-primary/20 object-cover" alt="{{ kol.name }}"
+              class="size-10 md:size-14 rounded-full border-2 border-primary/20 object-cover" alt="{{ kol.name }}"
               onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ kol.name|urlencode }}&background=1E2630&color=fff'" />
             <div
-              class="absolute -bottom-1 -right-1 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 rounded-full p-1">
-              <svg class="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
+              class="absolute -bottom-1 -right-1 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 rounded-full p-0.5 md:p-1">
+              <svg class="w-2 h-2 md:w-3 md:h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
                 <path
                   d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
               </svg>
             </div>
           </div>
           <div class="flex-1 min-w-0">
-            <h3 class="text-white font-bold truncate">{{ kol.name }}</h3>
-            <p class="text-[#9dabb8] text-xs truncate">@{{ kol.username }}</p>
+            <h3 class="text-white font-bold text-xs md:text-base truncate">{{ kol.name }}</h3>
+            <p class="text-[#9dabb8] text-[10px] md:text-xs truncate">@{{ kol.username }}</p>
           </div>
         </div>
 
-        <!-- Tags -->
-        <div class="flex flex-wrap gap-1.5 h-6 overflow-hidden">
+        <!-- Tags (hidden on mobile) -->
+        <div class="hidden md:flex flex-wrap gap-1.5 h-6 overflow-hidden">
           {% for tag in kol.tags %}
           <span class="inline-flex items-center gap-1 bg-[#293038] px-2 py-1 rounded text-[10px] text-[#9dabb8]">
             <span class="text-primary font-bold">#</span>{{ tag }}
@@ -314,41 +337,42 @@
           {% endfor %}
         </div>
 
-        <!-- Location -->
-        <div class="flex items-center gap-2 bg-[#111418] rounded-lg p-2">
-          <span class="material-symbols-outlined text-primary text-[16px]">location_on</span>
-          <span class="text-white text-sm font-medium truncate">{{ kol.location or 'Unknown' }}</span>
+        <!-- Location (compact on mobile) -->
+        <div class="flex items-center gap-1 md:gap-2 bg-[#111418] rounded-lg p-1.5 md:p-2">
+          <span class="material-symbols-outlined text-primary text-[12px] md:text-[16px]">location_on</span>
+          <span class="text-white text-[10px] md:text-sm font-medium truncate">{{ kol.location or 'Unknown' }}</span>
         </div>
 
         <!-- Stats -->
-        <div class="grid grid-cols-2 gap-2">
-          <div class="bg-[#111418] rounded p-2 flex flex-col">
-            <span class="text-[#9dabb8] text-[10px] uppercase font-bold">Followers</span>
-            <span class="text-white font-mono font-medium text-sm">{{ kol.followers }}</span>
+        <div class="grid grid-cols-2 gap-1.5 md:gap-2">
+          <div class="bg-[#111418] rounded p-1.5 md:p-2 flex flex-col">
+            <span class="text-[#9dabb8] text-[8px] md:text-[10px] uppercase font-bold">Followers</span>
+            <span class="text-white font-mono font-medium text-[11px] md:text-sm">{{ kol.followers }}</span>
           </div>
-          <div class="bg-[#111418] rounded p-2 flex flex-col">
-            <span class="text-[#9dabb8] text-[10px] uppercase font-bold">ER</span>
-            <span class="text-green-400 font-mono font-medium text-sm">{{ kol.er }}</span>
+          <div class="bg-[#111418] rounded p-1.5 md:p-2 flex flex-col">
+            <span class="text-[#9dabb8] text-[8px] md:text-[10px] uppercase font-bold">ER</span>
+            <span class="text-green-400 font-mono font-medium text-[11px] md:text-sm">{{ kol.er }}</span>
           </div>
         </div>
 
         <!-- Actions -->
-        <div class="flex gap-2 mt-auto">
+        <div class="flex gap-1.5 md:gap-2 mt-auto">
           {% if saved_usernames and kol.username in saved_usernames %}
           <a href="/remove_from_list/{{ kol.username }}"
-            class="flex-1 bg-green-600/20 text-green-400 border border-green-500/30 py-2 rounded-lg text-sm font-medium text-center hover:bg-red-600/20 hover:text-red-400 hover:border-red-500/30 transition-all flex items-center justify-center gap-1 group">
-            <span class="material-symbols-outlined text-[16px] group-hover:hidden">check_circle</span>
-            <span class="material-symbols-outlined text-[16px] hidden group-hover:inline">cancel</span>
-            <span class="group-hover:hidden">Ditambahkan</span>
-            <span class="hidden group-hover:inline">Hapus</span>
+            class="flex-1 bg-green-600/20 text-green-400 border border-green-500/30 py-1.5 md:py-2 rounded-lg text-[10px] md:text-sm font-medium text-center hover:bg-red-600/20 hover:text-red-400 hover:border-red-500/30 transition-all flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[14px] md:text-[16px]">check_circle</span>
+            <span class="hidden md:inline">Saved</span>
           </a>
           {% else %}
           <a href="/add_to_list/{{ kol.username }}"
-            class="flex-1 bg-primary text-white py-2 rounded-lg text-sm font-medium text-center hover:bg-blue-600 transition-all">Add to List</a>
+            class="flex-1 bg-primary text-white py-1.5 md:py-2 rounded-lg text-[10px] md:text-sm font-medium text-center hover:bg-blue-600 transition-all flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[14px] md:text-[16px]">add</span>
+            <span class="hidden md:inline">Add to List</span>
+          </a>
           {% endif %}
           <a href="/influencer/{{ kol.username }}"
-            class="p-2 bg-[#36404a] text-white rounded-lg inline-flex items-center hover:bg-[#3c4753] transition-all">
-            <span class="material-symbols-outlined text-[20px]">visibility</span>
+            class="p-1.5 md:p-2 bg-[#36404a] text-white rounded-lg inline-flex items-center hover:bg-[#3c4753] transition-all">
+            <span class="material-symbols-outlined text-[16px] md:text-[20px]">visibility</span>
           </a>
         </div>
       </div>

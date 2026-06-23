@@ -173,8 +173,39 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col h-full overflow-hidden">
+        <div class="flex-1 flex flex-col h-full overflow-hidden pb-14 lg:pb-0">
             {% block content %}{% endblock %}
+        </div>
+
+        <!-- Mobile Bottom Navigation -->
+        <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-[#0D1219]/95 backdrop-blur-lg border-t border-white/10 z-50 flex items-center justify-around px-2 py-2">
+            <a href="/" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg {% if request.path == '/' %}text-primary{% else %}text-[#9dabb8]{% endif %} transition-all">
+                <span class="material-symbols-outlined text-[22px] {% if request.path == '/' %}fill{% endif %}">search</span>
+                <span class="text-[10px] font-semibold">Discovery</span>
+            </a>
+            <a href="/saved-lists" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg {% if request.path == '/saved-lists' %}text-primary{% else %}text-[#9dabb8]{% endif %} transition-all">
+                <span class="material-symbols-outlined text-[22px] {% if request.path == '/saved-lists' %}fill{% endif %}">bookmarks</span>
+                <span class="text-[10px] font-semibold">Saved</span>
+            </a>
+            {% if session.get('user_id') %}
+            <a href="/logout" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-[#9dabb8] transition-all">
+                <div class="h-6 w-6 rounded-full bg-gradient-to-tr from-primary to-blue-500 flex items-center justify-center font-bold text-white text-[10px]">
+                    {{ session.get('username', 'U')[0].upper() }}
+                </div>
+                <span class="text-[10px] font-semibold">{{ session.get('username')[:6] }}</span>
+            </a>
+            {% else %}
+            <a href="/login" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-[#9dabb8] transition-all">
+                <span class="material-symbols-outlined text-[22px]">login</span>
+                <span class="text-[10px] font-semibold">Masuk</span>
+            </a>
+            {% endif %}
+            {% if session.get('is_admin') %}
+            <a href="/admin" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-amber-400 transition-all">
+                <span class="material-symbols-outlined text-[22px]">admin_panel_settings</span>
+                <span class="text-[10px] font-semibold">Admin</span>
+            </a>
+            {% endif %}
         </div>
     </div>
 
