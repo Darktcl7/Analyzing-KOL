@@ -240,7 +240,7 @@
           <div class="relative group">
             <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-purple-400/80 group-focus-within:text-purple-400 font-bold transition-colors text-sm">#</span>
             <input name="niche_tags" class="bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-7 md:pl-8 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm w-full focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none shadow-inner"
-              placeholder="food, beauty..." value="{{ f.niche_tags or '' }}" />
+              placeholder="kulinermalang, beauty..." value="{{ f.niche_tags or '' }}" />
           </div>
         </div>
 
@@ -328,14 +328,7 @@
           </div>
         </div>
 
-        <!-- Tags (hidden on mobile) -->
-        <div class="hidden md:flex flex-wrap gap-1.5 h-6 overflow-hidden">
-          {% for tag in kol.tags %}
-          <span class="inline-flex items-center gap-1 bg-[#293038] px-2 py-1 rounded text-[10px] text-[#9dabb8]">
-            <span class="text-primary font-bold">#</span>{{ tag }}
-          </span>
-          {% endfor %}
-        </div>
+        <!-- Tags removed by request -->
 
         <!-- Location (compact on mobile) -->
         <div class="flex items-center gap-1 md:gap-2 bg-[#111418] rounded-lg p-1.5 md:p-2">

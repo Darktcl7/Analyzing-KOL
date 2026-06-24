@@ -3,7 +3,7 @@
 {% block title %}Saved Lists - KOL Scout{% endblock %}
 
 {% block content %}
-<div class="flex-1 overflow-y-auto p-8">
+<div class="flex-1 overflow-y-auto p-4 md:p-8">
     <div class="max-w-7xl mx-auto">
 
         <!-- Header Section -->
@@ -14,20 +14,30 @@
             </div>
             <div class="flex flex-wrap gap-3">
                 <button onclick="openCreateFolderModal()"
-                    class="inline-flex items-center gap-2 bg-[#293038] hover:bg-[#36404a] text-white px-5 py-3 rounded-xl font-bold transition-all">
-                    <span class="material-symbols-outlined text-[20px]">create_new_folder</span>
+                    class="inline-flex items-center gap-2 bg-[#293038] hover:bg-[#36404a] text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all">
+                    <span class="material-symbols-outlined text-[18px]">create_new_folder</span>
                     Buat Folder
                 </button>
-                <button onclick="window.print()"
-                    class="inline-flex items-center gap-2 bg-[#293038] hover:bg-[#36404a] text-white px-5 py-3 rounded-xl font-bold transition-all">
-                    <span class="material-symbols-outlined text-[20px]">print</span>
-                    Print
-                </button>
                 {% if active_folder %}
-                <a href="/export_list/{{ active_folder.id }}"
-                    class="inline-flex items-center gap-2 bg-primary hover:bg-blue-600 text-white px-5 py-3 rounded-xl font-bold transition-all">
-                    <span class="material-symbols-outlined text-[20px]">download</span>
-                    Export CSV
+                <a href="/campaign/{{ active_folder.id }}"
+                    class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all">
+                    <span class="material-symbols-outlined text-[18px]">assignment</span>
+                    Brief & Storyline
+                </a>
+                <a href="/campaign/tracker/{{ active_folder.id }}"
+                    class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all">
+                    <span class="material-symbols-outlined text-[18px]">monitoring</span>
+                    Post Tracker
+                </a>
+                <a href="/proposal/share/{{ active_folder.id }}" target="_blank"
+                    class="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all">
+                    <span class="material-symbols-outlined text-[18px]">share</span>
+                    Link Proposal Klien
+                </a>
+                <a href="/export_excel/{{ active_folder.id }}"
+                    class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all">
+                    <span class="material-symbols-outlined text-[18px]">table_view</span>
+                    Export Excel
                 </a>
                 {% endif %}
             </div>
@@ -128,82 +138,165 @@
                 <table class="w-full text-left">
                     <thead class="bg-[#111418] text-[#9dabb8] text-xs uppercase tracking-widest font-bold">
                         <tr>
-                            <th class="px-6 py-5">Influencer</th>
-                            <th class="px-6 py-5">Followers</th>
-                            <th class="px-6 py-5">ER</th>
-                            <th class="px-6 py-5">Status Negosiasi (CRM)</th>
-                            <th class="px-6 py-5">Catatan Privat</th>
-                            <th class="px-6 py-5 text-right">Aksi</th>
+                            <th class="px-4 py-5">Influencer</th>
+                            <th class="px-4 py-5">Followers & ER</th>
+                            <th class="px-4 py-5">Endorsement Stats</th>
+                            <th class="px-4 py-5">Rate Cards (Rp)</th>
+                            <th class="px-4 py-5">CPV / CPE</th>
+                            <th class="px-4 py-5">Status & Notes</th>
+                            <th class="px-4 py-5 text-right">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#3c4753]/20">
                         {% for kol in influencers %}
-                        <tr class="hover:bg-white/5 transition-colors group">
+                        {% set views_val = kol.endorsement_avg_views or kol.avg_views_int or 0 %}
+                        {% set likes_val = kol.endorsement_avg_likes or 0 %}
+                        {% set comments_val = kol.endorsement_avg_comments or 0 %}
+                        {% if not likes_val %}
+                            {% set likes_val = kol.avg_likes|replace('K', '000')|replace('M', '000000')|float|int %}
+                        {% endif %}
+                        {% if not comments_val %}
+                            {% set comments_val = kol.avg_comments|int %}
+                        {% endif %}
+                        {% set eng_val = likes_val + comments_val %}
+                        <tr class="hover:bg-white/5 transition-colors group" data-username="{{ kol.username }}" data-views="{{ views_val }}" data-engagement="{{ eng_val }}">
 
                             <!-- Influencer Info -->
-                            <td class="px-6 py-5">
-                                <div class="flex items-center gap-4">
-                                    <img src="{{ kol.image }}"
-                                        class="size-12 rounded-full border border-[#3c4753] object-cover"
-                                        alt="{{ kol.name }}"
-                                        onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ kol.name|urlencode }}&background=random'" />
+                            <td class="px-4 py-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="relative group/avatar">
+                                        <img src="{{ kol.image }}"
+                                            class="size-11 rounded-full border border-[#3c4753] object-cover"
+                                            alt="{{ kol.name }}"
+                                            onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ kol.name|urlencode }}&background=random'" />
+                                        <a href="/influencer/refresh/{{ kol.username }}" 
+                                            class="absolute -bottom-1 -right-1 bg-black/80 hover:bg-primary border border-white/10 rounded-full p-0.5 text-white transition-all shadow"
+                                            title="Sync / Refresh Data dari Instagram">
+                                            <span class="material-symbols-outlined text-[12px] block">sync</span>
+                                        </a>
+                                    </div>
                                     <div>
-                                        <div class="font-bold text-white">{{ kol.name }}</div>
+                                        <div class="font-bold text-white text-sm">{{ kol.name }}</div>
                                         <div class="text-xs text-[#9dabb8]">@{{ kol.username }}</div>
                                     </div>
                                 </div>
                             </td>
 
-                            <!-- Followers -->
-                            <td class="px-6 py-5">
-                                <span class="font-mono font-semibold text-white">{{ kol.followers }}</span>
+                            <!-- Followers & General ER -->
+                            <td class="px-4 py-5">
+                                <div class="text-sm font-bold text-white">{{ kol.followers }}</div>
+                                <div class="text-xs text-[#9dabb8]">ER: <span class="text-green-400 font-mono">{{ kol.er }}</span></div>
                             </td>
 
-                            <!-- Engagement Rate -->
-                            <td class="px-6 py-5">
-                                <span class="font-mono font-semibold text-green-400">{{ kol.er }}</span>
+                            <!-- Endorsement Stats -->
+                            <td class="px-4 py-5">
+                                {% if kol.endorsement_posts_count and kol.endorsement_posts_count > 0 %}
+                                    <div class="text-sm font-bold text-purple-400 font-mono">{{ kol.endorsement_er }}</div>
+                                    <div class="text-xs text-[#9dabb8]">Avg Views: <span class="text-white font-mono font-bold">{{ kol.endorsement_avg_views_fmt or '0' }}</span></div>
+                                    <div class="text-[10px] text-[#9dabb8]">Dari {{ kol.endorsement_posts_count }} post sponsor</div>
+                                {% else %}
+                                    <div class="text-sm font-bold text-gray-500 font-mono">-</div>
+                                    <div class="text-xs text-gray-500">No sponsored posts</div>
+                                    <div class="text-[10px] text-[#9dabb8]">Gen Views: <span class="text-white font-mono font-bold">{{ kol.avg_views or '0' }}</span></div>
+                                {% endif %}
                             </td>
 
-                            <!-- Status Dropdown (CRM) -->
-                            <td class="px-6 py-5">
-                                <select onchange="updateCRM('{{ kol.username }}', 'status', this.value)"
-                                    class="status-select bg-black/40 border border-white/5 rounded-xl px-3 py-1.5 text-xs font-semibold focus:ring-1 focus:ring-primary focus:border-primary outline-none cursor-pointer text-white">
-                                    <option value="Scouted" {% if kol.status == 'Scouted' %}selected{% endif %}>🔍 Scouted</option>
-                                    <option value="Contacted" {% if kol.status == 'Contacted' %}selected{% endif %}>💬 Contacted</option>
-                                    <option value="Negotiating" {% if kol.status == 'Negotiating' %}selected{% endif %}>⏳ Negotiating</option>
-                                    <option value="Deal" {% if kol.status == 'Deal' %}selected{% endif %}>🤝 Deal</option>
-                                    <option value="Done" {% if kol.status == 'Done' %}selected{% endif %}>✅ Done</option>
-                                </select>
+                            <!-- Rate Cards -->
+                            <td class="px-4 py-5">
+                                <div class="flex flex-col gap-1.5">
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-[10px] text-[#9dabb8] w-8">Reel:</span>
+                                        <input type="number" value="{{ kol.rate_reel or 0 }}" 
+                                            placeholder="Reel"
+                                            onblur="updateRates('{{ kol.username }}', this.value, null, null)"
+                                            class="bg-black/30 border border-white/5 focus:border-primary/50 text-white rounded px-1.5 py-0.5 text-xs w-20 outline-none font-mono text-right" />
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-[10px] text-[#9dabb8] w-8">Story:</span>
+                                        <input type="number" value="{{ kol.rate_story or 0 }}" 
+                                            placeholder="Story"
+                                            onblur="updateRates('{{ kol.username }}', null, this.value, null)"
+                                            class="bg-black/30 border border-white/5 focus:border-primary/50 text-white rounded px-1.5 py-0.5 text-xs w-20 outline-none font-mono text-right" />
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-[10px] text-[#9dabb8] w-8">Feed:</span>
+                                        <input type="number" value="{{ kol.rate_feed or 0 }}" 
+                                            placeholder="Feed"
+                                            onblur="updateRates('{{ kol.username }}', null, null, this.value)"
+                                            class="bg-black/30 border border-white/5 focus:border-primary/50 text-white rounded px-1.5 py-0.5 text-xs w-20 outline-none font-mono text-right" />
+                                    </div>
+                                </div>
                             </td>
 
-                            <!-- Private Notes -->
-                            <td class="px-6 py-5">
-                                <div class="relative max-w-[240px]">
+                            <!-- CPV / CPE -->
+                            <td class="px-4 py-5">
+                                {% set views_val = kol.endorsement_avg_views or kol.avg_views_int or 0 %}
+                                {% set likes_val = kol.endorsement_avg_likes or 0 %}
+                                {% set comments_val = kol.endorsement_avg_comments or 0 %}
+                                {% if not likes_val %}
+                                    {% set likes_val = kol.avg_likes|replace('K', '000')|replace('M', '000000')|float|int %}
+                                {% endif %}
+                                {% if not comments_val %}
+                                    {% set comments_val = kol.avg_comments|int %}
+                                {% endif %}
+                                {% set eng_val = likes_val + comments_val %}
+                                
+                                <div class="text-xs text-[#9dabb8]">
+                                    CPV: <span class="text-white font-mono font-bold" id="cpv-{{ kol.username }}">
+                                        {% if views_val > 0 and kol.rate_reel %}
+                                            Rp{{ "%.0f"|format(kol.rate_reel / views_val) }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="text-xs text-[#9dabb8] mt-1.5">
+                                    CPE: <span class="text-white font-mono font-bold" id="cpe-{{ kol.username }}">
+                                        {% if eng_val > 0 and kol.rate_reel %}
+                                            Rp{{ "%.0f"|format(kol.rate_reel / eng_val) }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </td>
+
+                            <!-- Status Dropdown (CRM) & Notes -->
+                            <td class="px-4 py-5">
+                                <div class="flex flex-col gap-2">
+                                    <select onchange="updateCRM('{{ kol.username }}', 'status', this.value)"
+                                        class="status-select bg-black/40 border border-white/5 rounded-xl px-2 py-1 text-xs font-semibold focus:ring-1 focus:ring-primary focus:border-primary outline-none cursor-pointer text-white w-[130px]">
+                                        <option value="Scouted" {% if kol.status == 'Scouted' %}selected{% endif %}>🔍 Scouted</option>
+                                        <option value="Contacted" {% if kol.status == 'Contacted' %}selected{% endif %}>💬 Contacted</option>
+                                        <option value="Negotiating" {% if kol.status == 'Negotiating' %}selected{% endif %}>⏳ Negotiating</option>
+                                        <option value="Deal" {% if kol.status == 'Deal' %}selected{% endif %}>🤝 Deal</option>
+                                        <option value="Done" {% if kol.status == 'Done' %}selected{% endif %}>✅ Done</option>
+                                    </select>
                                     <input type="text" value="{{ kol.notes or '' }}" 
-                                        placeholder="Tambahkan catatan..."
+                                        placeholder="Catatan..."
                                         onblur="updateCRM('{{ kol.username }}', 'notes', this.value)"
-                                        class="bg-black/30 border border-white/5 focus:border-primary/50 text-white rounded-lg px-3 py-2 text-xs w-full transition-all outline-none" />
+                                        class="bg-black/30 border border-white/5 focus:border-primary/50 text-white rounded-lg px-2.5 py-1 text-xs w-[130px] transition-all outline-none" />
                                 </div>
                             </td>
 
                             <!-- Actions -->
-                            <td class="px-6 py-5">
-                                <div class="flex justify-end gap-2">
+                            <td class="px-4 py-5">
+                                <div class="flex justify-end gap-1.5">
                                     <a href="/influencer/{{ kol.username }}"
-                                        class="p-2 hover:bg-[#293038] rounded-lg text-[#9dabb8] hover:text-white transition-all"
+                                        class="p-1.5 hover:bg-[#293038] rounded-lg text-[#9dabb8] hover:text-white transition-all"
                                         title="View Profile">
-                                        <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                        <span class="material-symbols-outlined text-[18px]">visibility</span>
                                     </a>
                                     <a href="https://instagram.com/{{ kol.username }}" target="_blank"
-                                        class="p-2 hover:bg-[#293038] rounded-lg text-[#9dabb8] hover:text-white transition-all"
+                                        class="p-1.5 hover:bg-[#293038] rounded-lg text-[#9dabb8] hover:text-white transition-all"
                                         title="Open Instagram">
-                                        <span class="material-symbols-outlined text-[20px]">open_in_new</span>
+                                        <span class="material-symbols-outlined text-[18px]">open_in_new</span>
                                     </a>
                                     <a href="/remove_from_list/{{ kol.username }}?list_id={{ active_folder.id }}"
-                                        class="p-2 hover:bg-red-500/10 rounded-lg text-[#9dabb8] hover:text-red-400 transition-all"
+                                        class="p-1.5 hover:bg-red-500/10 rounded-lg text-[#9dabb8] hover:text-red-400 transition-all"
                                         title="Hapus dari daftar"
                                         onclick="return confirm('Hapus {{ kol.name }} dari folder ini?')">
-                                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
                                     </a>
                                 </div>
                             </td>
@@ -286,8 +379,6 @@
 
     function updateCRM(username, field, value) {
         const listId = "{{ active_folder.id }}";
-        
-        // Buat data payload
         const payload = {
             list_id: listId,
             username: username
@@ -311,6 +402,63 @@
             console.error('Error:', error);
             alert('Terjadi kesalahan koneksi saat menyimpan.');
         });
+    }
+
+    function updateRates(username, rateReel, rateStory, rateFeed) {
+        const listId = "{{ active_folder.id }}";
+        const payload = {
+            list_id: listId,
+            username: username,
+            rate_reel: rateReel !== null ? parseInt(rateReel) : undefined,
+            rate_story: rateStory !== null ? parseInt(rateStory) : undefined,
+            rate_feed: rateFeed !== null ? parseInt(rateFeed) : undefined
+        };
+
+        const row = document.getElementById('cpv-' + username).closest('tr');
+        const reelInput = row.querySelector('input[placeholder="Reel"]');
+        const storyInput = row.querySelector('input[placeholder="Story"]');
+        const feedInput = row.querySelector('input[placeholder="Feed"]');
+
+        if (rateReel === null) payload.rate_reel = parseInt(reelInput.value) || 0;
+        if (rateStory === null) payload.rate_story = parseInt(storyInput.value) || 0;
+        if (rateFeed === null) payload.rate_feed = parseInt(feedInput.value) || 0;
+
+        fetch('/update_rate_card', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                recalculateCPVCPE(username, payload.rate_reel, row);
+            } else {
+                alert('Gagal menyimpan harga rate card.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function recalculateCPVCPE(username, rateReel, row) {
+        const cpvSpan = document.getElementById('cpv-' + username);
+        const cpeSpan = document.getElementById('cpe-' + username);
+        
+        const viewsVal = parseInt(row.getAttribute('data-views')) || 0;
+        const engVal = parseInt(row.getAttribute('data-engagement')) || 0;
+
+        if (viewsVal > 0 && rateReel > 0) {
+            cpvSpan.innerText = 'Rp' + Math.round(rateReel / viewsVal).toLocaleString('id-ID');
+        } else {
+            cpvSpan.innerText = '-';
+        }
+
+        if (engVal > 0 && rateReel > 0) {
+            cpeSpan.innerText = 'Rp' + Math.round(rateReel / engVal).toLocaleString('id-ID');
+        } else {
+            cpeSpan.innerText = '-';
+        }
     }
 </script>
 {% endblock %}

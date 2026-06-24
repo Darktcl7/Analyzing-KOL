@@ -1,7 +1,7 @@
 import os
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Set, Dict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from apify_client import ApifyClient
@@ -11,7 +11,7 @@ from config import APIFY_API_TOKEN
 DEFAULT_MAX_PROFILE_SCRAPES = 20
 DEFAULT_MAX_PARALLEL_WORKERS = 5
 OUTPUT_FILE = 'influencers.json'
-POSTS_TO_SCAN = 5
+POSTS_TO_SCAN = 30
 
 class ApifyInstagramScraper:
     def __init__(self):
@@ -141,6 +141,31 @@ class ApifyInstagramScraper:
             return self._process_profile_data(items, username)
         except Exception as e:
             print(e)
+            return {}
+
+    def scrape_post_by_url(self, post_url: str) -> dict:
+        run_input = {
+            "directUrls": [post_url.strip()],
+            "resultsType": "posts",
+            "resultsLimit": 1
+        }
+        try:
+            run = self.client.actor("apify/instagram-scraper").call(run_input=run_input)
+            items = list(self.client.dataset(run["defaultDatasetId"]).iterate_items())
+            if not items: return {}
+            item = items[0]
+            likes = item.get('likesCount') or item.get('likes') or 0
+            comments = item.get('commentsCount') or item.get('comments') or 0
+            views = item.get('videoPlayCount') or item.get('videoViewCount') or item.get('playCount') or item.get('viewCount') or item.get('views') or 0
+            caption = item.get('caption') or ''
+            return {
+                'likes': likes,
+                'comments': comments,
+                'views': views,
+                'caption': caption
+            }
+        except Exception as e:
+            print(f"Error scraping post: {e}")
             return {}
 
     def get_existing_usernames(self, filename: str = None) -> Set[str]:
@@ -309,21 +334,71 @@ class ApifyInstagramScraper:
         loc = self.location_service.analyze_kol_location(bio, captions[:POSTS_TO_SCAN], geotags[:POSTS_TO_SCAN])
         
         folls = profile.get('followersCount', 0)
-        likes = sum(p.get('likesCount', 0) for p in posts)
-        comms = sum(p.get('commentsCount', 0) for p in posts)
-        er = ((likes + comms) / len(posts) / folls * 100) if folls and posts else 0
+        
+        total_likes = 0
+        total_comments = 0
+        total_views = 0
+        video_posts_count = 0
+        
+        endo_posts = []
+        endo_likes = 0
+        endo_comments = 0
+        endo_views = 0
+        endo_video_posts_count = 0
+        
+        endorsement_keywords = [
+            '#ads', '#endorse', '#paidpromote', '#pp', '#sponsor', '#promotion',
+            '#kerjasama', '#collab', '#partnership', '#paidpartnership', '#gifted',
+            'paid partnership', '#sp', 'sponsored', 'promosi', 'collaboration'
+        ]
+        
+        for p in posts:
+            likes_p = p.get('likesCount') or p.get('likes') or 0
+            comms_p = p.get('commentsCount') or p.get('comments') or 0
+            
+            views_p = p.get('videoPlayCount') or p.get('videoViewCount') or p.get('playCount') or p.get('viewCount') or p.get('views') or 0
+            is_video = p.get('type') == 'Video' or p.get('isVideo') or views_p > 0
+            
+            total_likes += likes_p
+            total_comments += comms_p
+            if is_video:
+                total_views += views_p
+                video_posts_count += 1
+                
+            # Endorsement check
+            caption_p = (p.get('caption') or '').lower()
+            is_endo = any(kw in caption_p for kw in endorsement_keywords) or p.get('isSponsored') or p.get('isPaidPartnership') or False
+            
+            if is_endo:
+                endo_posts.append(p)
+                endo_likes += likes_p
+                endo_comments += comms_p
+                if is_video:
+                    endo_views += views_p
+                    endo_video_posts_count += 1
+
+        avg_likes = int(total_likes / len(posts)) if posts else 0
+        avg_comments = int(total_comments / len(posts)) if posts else 0
+        avg_views = int(total_views / video_posts_count) if video_posts_count else 0
+        er = ((total_likes + total_comments) / len(posts) / folls * 100) if folls and posts else 0
+        
+        endo_count = len(endo_posts)
+        endo_avg_likes = int(endo_likes / endo_count) if endo_count else 0
+        endo_avg_comments = int(endo_comments / endo_count) if endo_count else 0
+        endo_avg_views = int(endo_views / endo_video_posts_count) if endo_video_posts_count else 0
+        endo_er = ((endo_likes + endo_comments) / endo_count / folls * 100) if folls and endo_count else 0
+
 
         # Check latest post date and skip if > 1 year (inactive)
         latest_post_date_str = None
         if posts:
-            import datetime
             sorted_dates = []
             for p in posts:
                 t_str = p.get('timestamp') or p.get('pubDate')
                 if t_str:
                     try:
                         clean_str = t_str.replace('Z', '+00:00')
-                        dt = datetime.datetime.fromisoformat(clean_str)
+                        dt = datetime.fromisoformat(clean_str)
                         sorted_dates.append(dt)
                     except:
                         pass
@@ -333,7 +408,7 @@ class ApifyInstagramScraper:
                 
                 # Compare naive datetimes
                 naive_latest = latest_dt.replace(tzinfo=None)
-                one_year_ago = datetime.datetime.now() - datetime.timedelta(days=365)
+                one_year_ago = datetime.now() - timedelta(days=365)
                 if naive_latest < one_year_ago:
                     print(f"[FILTER] User @{username} dilewati karena postingan terakhirnya ({naive_latest.strftime('%Y-%m-%d')}) sudah lebih dari 1 tahun yang lalu.")
                     return {}
@@ -366,17 +441,32 @@ class ApifyInstagramScraper:
         tags = set()
         txt = (bio + ' ' + ' '.join(captions[:5])).lower()
         cat = {
-            'Beauty': ['beauty', 'makeup', 'skincare', 'cosmetic'],
-            'Food': ['food', 'kuliner', 'makan', 'cafe', 'resto'],
-            'Travel': ['travel', 'jalan', 'trip', 'explore'],
-            'Lifestyle': ['lifestyle', 'daily'],
-            'Parenting': ['mom', 'mama', 'ibu', 'parenting'],
-            'Tech': ['tech', 'gadget', 'review'],
-            'Fitness': ['fitness', 'gym', 'workout']
+            'Beauty': ['beauty', 'makeup', 'skincare', 'cosmetic', 'mua', 'salon'],
+            'Food': ['food', 'kuliner', 'makan', 'cafe', 'resto', 'jajan', 'kopi', 'coffee'],
+            'Travel': ['travel', 'jalan', 'trip', 'explore', 'wisata', 'liburan'],
+            'Lifestyle': ['lifestyle', 'daily', 'outfit', 'fashion'],
+            'Parenting': ['mom', 'mama', 'ibu', 'parenting', 'kids', 'anak'],
+            'Tech': ['tech', 'gadget', 'review', 'laptop', 'hp', 'smartphone'],
+            'Fitness': ['fitness', 'gym', 'workout', 'olahraga', 'sehat'],
+            'Entertainment': ['komedi', 'comedy', 'standup', 'music', 'musik', 'event', 'hiburan'],
+            'Otomotif': ['motor', 'mobil', 'bengkel', 'otomotif', 'dealer', 'knalpot']
         }
         for c, kws in cat.items():
-            if any(k in txt for k in kws): tags.add(c)
+            for k in kws:
+                if re.search(r'\b' + re.escape(k) + r'\b', txt):
+                    tags.add(c)
+                    break
         tags = list(tags)[:5] or ['General']
+        
+        # Ekstrak semua hashtag unik dari caption postingan (feed/reels)
+        caption_hashtags = set()
+        for cap in captions[:POSTS_TO_SCAN]:
+            found = re.findall(r'#(\w+)', cap.lower())
+            caption_hashtags.update(found)
+        # Tambah juga hashtag dari bio
+        bio_hashtags_found = re.findall(r'#(\w+)', bio.lower())
+        caption_hashtags.update(bio_hashtags_found)
+        caption_hashtags = sorted(caption_hashtags)
         
         # Classify Account Type: Personal, Creator, Business
         is_business = profile.get('isBusinessAccount', False)
@@ -443,10 +533,20 @@ class ApifyInstagramScraper:
             'tags': tags,
             'account_type': account_type,
             'is_verified': profile.get('verified') or profile.get('isVerified') or False,
-            'avg_likes': fmt(int(likes / len(posts)) if posts else 0),
-            'avg_comments': int(comms / len(posts)) if posts else 0,
+            'avg_likes': fmt(avg_likes),
+            'avg_comments': avg_comments,
+            'avg_views': fmt(avg_views),
+            'avg_views_int': avg_views,
+            'endorsement_posts_count': endo_count,
+            'endorsement_avg_likes': endo_avg_likes,
+            'endorsement_avg_comments': endo_avg_comments,
+            'endorsement_avg_views': endo_avg_views,
+            'endorsement_avg_views_fmt': fmt(endo_avg_views),
+            'endorsement_er': f"{endo_er:.1f}%",
+            'endorsement_er_float': round(endo_er, 2),
             'posts_count': profile.get('postsCount', len(posts)),
             'scraped_at': datetime.now().isoformat(),
             'posts_analyzed': len(posts),
-            'latest_post_date': latest_post_date_str
+            'latest_post_date': latest_post_date_str,
+            'caption_hashtags': caption_hashtags
         }

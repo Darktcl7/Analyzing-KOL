@@ -1,0 +1,249 @@
+{% extends "layout.html" %}
+
+{% block title %}Post Tracker - KOL Scout{% endblock %}
+
+{% block content %}
+<div class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 flex-col gap-4">
+        <div class="size-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <div class="text-white font-bold text-lg" id="loadingText">Menghubungi Instagram API & Mengambil Insight...</div>
+        <p class="text-[#9dabb8] text-xs">Mohon tunggu, proses ini biasanya memerlukan waktu 10-20 detik.</p>
+    </div>
+
+    <div class="max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+            <div>
+                <div class="flex items-center gap-2 text-orange-400 font-bold text-sm mb-1 uppercase tracking-wider">
+                    <span class="material-symbols-outlined text-[16px]">monitoring</span>
+                    Live Reporting
+                </div>
+                <h1 class="text-3xl font-black text-white mb-1">Post Insight Tracker (H+7)</h1>
+                <p class="text-[#9dabb8]">Pantau langsung performa postingan live tanpa perlu screenshot dari KOL.</p>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="refreshAllTrackerPosts()"
+                    class="bg-[#293038] hover:bg-[#36404a] text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[18px]">sync</span>
+                    Refresh Semua Post
+                </button>
+                <a href="/saved-lists?list_id={{ active_folder.id }}" 
+                    class="inline-flex items-center gap-2 bg-[#293038] hover:bg-[#36404a] text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all">
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    Kembali
+                </a>
+            </div>
+        </div>
+
+        <!-- Add Link Card -->
+        <div class="bg-surface-dark border border-white/5 rounded-2xl p-6 mb-8">
+            <h3 class="text-base font-bold text-white mb-4">Tambahkan Tautan Postingan untuk Dilacak</h3>
+            <form id="addPostForm" onsubmit="handleAddPost(event)" class="flex flex-col md:flex-row gap-4 items-end">
+                <input type="hidden" name="list_id" value="{{ active_folder.id }}" />
+                
+                <!-- Select KOL -->
+                <div class="w-full md:w-1/4">
+                    <label class="block text-xs font-bold text-[#9dabb8] uppercase tracking-wider mb-2">Pilih Influencer</label>
+                    <select name="username" required
+                        class="bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none cursor-pointer">
+                        <option value="">-- Pilih KOL --</option>
+                        {% for kol in kols %}
+                        <option value="{{ kol.username }}">{{ kol.name }} (@{{ kol.username }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- URL Input -->
+                <div class="flex-1 w-full">
+                    <label class="block text-xs font-bold text-[#9dabb8] uppercase tracking-wider mb-2">Instagram Reel / Post URL</label>
+                    <input type="url" name="post_url" placeholder="https://www.instagram.com/reel/C8..." required
+                        class="bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" />
+                </div>
+                
+                <!-- Submit -->
+                <button type="submit"
+                    class="bg-primary hover:bg-blue-600 text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-lg shadow-primary/20 w-full md:w-auto h-[46px] flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span>
+                    Mulai Lacak
+                </button>
+            </form>
+        </div>
+
+        <!-- Tracked Posts Table -->
+        <div class="bg-surface-dark border border-[#3c4753]/30 rounded-2xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-[#111418] text-[#9dabb8] text-xs uppercase tracking-widest font-bold">
+                        <tr>
+                            <th class="px-5 py-4 w-1/5">Influencer</th>
+                            <th class="px-5 py-4 w-1/4">Tautan Post</th>
+                            <th class="px-5 py-4 w-1/4">Kutipan Caption</th>
+                            <th class="px-5 py-4 w-1/4">Likes / Comments / Views</th>
+                            <th class="px-5 py-4 w-1/12">ER Post</th>
+                            <th class="px-5 py-4 w-1/6">Update Terakhir</th>
+                            <th class="px-5 py-4 text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#3c4753]/20">
+                        {% for post in tracked_posts %}
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <!-- Influencer -->
+                            <td class="px-5 py-4">
+                                <div class="font-bold text-white text-sm">@{{ post.username }}</div>
+                            </td>
+                            
+                            <!-- Post URL -->
+                            <td class="px-5 py-4">
+                                <a href="{{ post.post_url }}" target="_blank" 
+                                    class="text-primary hover:underline text-xs truncate max-w-[200px] flex items-center gap-1">
+                                    {{ post.post_url }}
+                                    <span class="material-symbols-outlined text-[12px]">open_in_new</span>
+                                </a>
+                            </td>
+                            
+                            <!-- Caption -->
+                            <td class="px-5 py-4">
+                                <p class="text-xs text-[#9dabb8] truncate max-w-[200px]" title="{{ post.caption }}">
+                                    {{ post.caption or '-' }}
+                                </p>
+                            </td>
+                            
+                            <!-- Metrics -->
+                            <td class="px-5 py-4 text-xs font-mono">
+                                <div class="flex flex-col gap-0.5">
+                                    <div>❤️ Likes: <span class="text-white font-bold">{{ "{:,}".format(post.likes_count) }}</span></div>
+                                    <div>💬 Comms: <span class="text-white font-bold">{{ "{:,}".format(post.comments_count) }}</span></div>
+                                    <div>👁️ Views: <span class="text-blue-400 font-bold">{{ "{:,}".format(post.views_count) if post.views_count else '-' }}</span></div>
+                                </div>
+                            </td>
+                            
+                            <!-- Post ER -->
+                            <td class="px-5 py-4">
+                                <span class="font-mono text-xs font-bold text-green-400">{{ post.er }}</span>
+                            </td>
+                            
+                            <!-- Last Updated -->
+                            <td class="px-5 py-4">
+                                <div class="text-[10px] text-[#9dabb8] font-mono leading-tight">
+                                    {{ post.last_updated }}
+                                </div>
+                            </td>
+                            
+                            <!-- Actions -->
+                            <td class="px-5 py-4">
+                                <div class="flex justify-end gap-2">
+                                    <button onclick="deleteTrackedPost({{ post.id }})"
+                                        class="p-2 hover:bg-red-500/10 rounded-lg text-[#9dabb8] hover:text-red-400 transition-all"
+                                        title="Hapus pelacakan">
+                                        <span class="material-symbols-outlined text-[18px] block">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="px-8 py-16 text-center">
+                                <div class="flex flex-col items-center justify-center text-center text-[#9dabb8]">
+                                    <span class="material-symbols-outlined text-5xl mb-3">analytics</span>
+                                    <h4 class="text-white font-bold mb-1">Belum Ada Tautan Dilacak</h4>
+                                    <p class="text-xs">Masukkan tautan Instagram Reel/Post di atas untuk memantau performa real-time.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function showLoading(text) {
+        document.getElementById('loadingText').innerText = text;
+        document.getElementById('loadingOverlay').classList.remove('hidden');
+        document.getElementById('loadingOverlay').classList.add('flex');
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingOverlay').classList.add('hidden');
+        document.getElementById('loadingOverlay').classList.remove('flex');
+    }
+
+    function handleAddPost(event) {
+        event.preventDefault();
+        showLoading('Menghubungi Instagram API & Mengambil Insight...');
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        fetch('/campaign/tracker/add', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.status === 'success') {
+                window.location.reload();
+            } else {
+                alert('Gagal melacak postingan: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(err => {
+            hideLoading();
+            console.error('Error adding tracked post:', err);
+            alert('Terjadi kesalahan koneksi.');
+        });
+    }
+
+    function refreshAllTrackerPosts() {
+        showLoading('Menyegarkan metrik live seluruh postingan...');
+        
+        fetch('/campaign/tracker/refresh', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'list_id={{ active_folder.id }}'
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.status === 'success') {
+                alert('Selesai menyegarkan ' + data.refreshed + ' postingan.');
+                window.location.reload();
+            } else {
+                alert('Gagal menyegarkan postingan.');
+            }
+        })
+        .catch(err => {
+            hideLoading();
+            console.error('Error refreshing posts:', err);
+            alert('Terjadi kesalahan koneksi.');
+        });
+    }
+
+    function deleteTrackedPost(postId) {
+        if (!confirm('Hapus pelacakan postingan ini?')) return;
+        
+        fetch('/campaign/tracker/delete/' + postId, {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.reload();
+            } else {
+                alert('Gagal menghapus.');
+            }
+        })
+        .catch(err => console.error('Error deleting tracked post:', err));
+    }
+</script>
+{% endblock %}

@@ -86,6 +86,47 @@ def init_db():
                 UNIQUE(list_id, username)
             )
         """)
+
+        # Get existing columns in list_items and perform migrations
+        cursor.execute("PRAGMA table_info(list_items)")
+        columns = [row['name'] for row in cursor.fetchall()]
+        
+        new_cols = {
+            'rate_reel': 'INTEGER DEFAULT 0',
+            'rate_story': 'INTEGER DEFAULT 0',
+            'rate_feed': 'INTEGER DEFAULT 0',
+            'brief_details': "TEXT DEFAULT ''",
+            'brief_due_date': "TEXT DEFAULT ''",
+            'storyline_concept': "TEXT DEFAULT ''",
+            'storyline_status': "TEXT DEFAULT 'Pending'",
+            'draft_link': "TEXT DEFAULT ''",
+            'draft_status': "TEXT DEFAULT 'Drafting'",
+            'draft_feedback': "TEXT DEFAULT ''",
+            'upload_url': "TEXT DEFAULT ''",
+            'upload_date': "TEXT DEFAULT ''",
+            'upload_status': "TEXT DEFAULT 'Pending'"
+        }
+        
+        for col_name, col_type in new_cols.items():
+            if col_name not in columns:
+                cursor.execute(f"ALTER TABLE list_items ADD COLUMN {col_name} {col_type}")
+                
+        # Create Tracked Posts table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS tracked_posts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                list_id INTEGER NOT NULL,
+                username TEXT NOT NULL,
+                post_url TEXT UNIQUE NOT NULL,
+                caption TEXT DEFAULT '',
+                likes_count INTEGER DEFAULT 0,
+                comments_count INTEGER DEFAULT 0,
+                views_count INTEGER DEFAULT 0,
+                er TEXT DEFAULT '0.0%',
+                last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (list_id) REFERENCES saved_lists(id) ON DELETE CASCADE
+            )
+        """)
         
         # Ensure admin user exists with ID 9999 to satisfy FOREIGN KEY checks
         cursor.execute("SELECT id FROM users WHERE id = 9999")
@@ -297,3 +338,66 @@ def get_all_saved_usernames_by_user(user_id):
         """, (user_id,))
         results = cursor.fetchall()
         return {r['username'] for r in results}
+
+
+@with_retry()
+def update_item_rates(list_id, username, rate_reel, rate_story, rate_feed):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE list_items 
+            SET rate_reel = ?, rate_story = ?, rate_feed = ? 
+            WHERE list_id = ? AND username = ?
+        """, (int(rate_reel or 0), int(rate_story or 0), int(rate_feed or 0), list_id, username.strip()))
+        conn.commit()
+        return cursor.rowcount > 0
+
+
+@with_retry()
+def update_item_campaign_field(list_id, username, field_name, value):
+    allowed_fields = [
+        'brief_details', 'brief_due_date', 'storyline_concept', 'storyline_status',
+        'draft_link', 'draft_status', 'draft_feedback', 'upload_url', 'upload_date', 'upload_status'
+    ]
+    if field_name not in allowed_fields:
+        return False
+    with get_db() as conn:
+        cursor = conn.cursor()
+        query = f"UPDATE list_items SET {field_name} = ? WHERE list_id = ? AND username = ?"
+        cursor.execute(query, (value, list_id, username.strip()))
+        conn.commit()
+        return cursor.rowcount > 0
+
+
+@with_retry()
+def add_tracked_post(list_id, username, post_url, caption='', likes=0, comments=0, views=0, er='0.0%'):
+    with get_db() as conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO tracked_posts 
+                (list_id, username, post_url, caption, likes_count, comments_count, views_count, er, last_updated)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            """, (list_id, username.strip(), post_url.strip(), caption, likes, comments, views, er))
+            conn.commit()
+            return True
+        except Exception as e:
+            print(f"Error adding tracked post: {e}")
+            return False
+
+
+@with_retry()
+def get_tracked_posts(list_id):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM tracked_posts WHERE list_id = ? ORDER BY last_updated DESC", (list_id,))
+        return [dict(row) for row in cursor.fetchall()]
+
+
+@with_retry()
+def remove_tracked_post(post_id):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM tracked_posts WHERE id = ?", (post_id,))
+        conn.commit()
+        return cursor.rowcount > 0

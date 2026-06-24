@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOL Campaign Proposal - {{ active_folder.name }}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts & Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3b82f6',
+                        'surface-dark': '#1e242b',
+                        'bg-dark': '#0c0f12',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0c0f12;
+            color: #f3f4f6;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .bg-surface-dark {
+                background: #f9fafb !important;
+                border: 1px solid #e5e7eb !important;
+            }
+            .text-white {
+                color: #111827 !important;
+            }
+            .text-[#9dabb8] {
+                color: #4b5563 !important;
+            }
+            input, select, textarea {
+                border: none !important;
+                background: transparent !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen">
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-12">
+
+        <!-- Top Header & Client Options (no-print) -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 border-b border-white/5 pb-8 no-print">
+            <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-xs font-bold text-primary mb-3">
+                    <span class="material-symbols-outlined text-[14px]">share</span>
+                    PROPOSAL KAMPANYE KOL
+                </div>
+                <h1 class="text-4xl font-outfit font-black text-white tracking-tight mb-2">{{ active_folder.name }}</h1>
+                <p class="text-[#9dabb8] text-sm">Rekomendasi influencer terpilih untuk kampanye Anda.</p>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-4 bg-surface-dark p-4 rounded-2xl border border-white/10">
+                <label class="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#9dabb8] uppercase tracking-wider">
+                    <input type="checkbox" id="toggle-rates" checked onchange="toggleRatesView(this.checked)"
+                        class="size-4 rounded border-gray-300 text-primary focus:ring-primary accent-primary cursor-pointer" />
+                    Tampilkan Harga & CPV/CPE
+                </label>
+                <button onclick="window.print()" 
+                    class="bg-primary hover:bg-blue-600 text-white font-bold text-xs uppercase px-4 py-2.5 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined text-[16px]">print</span>
+                    Cetak / Simpan PDF
+                </button>
+                <a href="/export_excel/{{ active_folder.id }}"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-green-600/20 no-print">
+                    <span class="material-symbols-outlined text-[16px]">table_view</span>
+                    Unduh Excel
+                </a>
+            </div>
+        </div>
+
+        <!-- Print-only Header -->
+        <div class="hidden print:block mb-10 border-b pb-6">
+            <h1 class="text-3xl font-black text-black">KOL Campaign Proposal: {{ active_folder.name }}</h1>
+            <p class="text-gray-600 text-sm">Dihasilkan oleh KOL Scout Platform</p>
+        </div>
+
+        <!-- Summary Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <div class="bg-surface-dark p-5 rounded-2xl border border-white/5 shadow-xl">
+                <p class="text-[#9dabb8] text-xs font-bold uppercase tracking-wider mb-1">Total KOL</p>
+                <p class="text-2xl font-outfit font-black text-white">{{ influencers|length }}</p>
+            </div>
+            
+            <div class="bg-surface-dark p-5 rounded-2xl border border-white/5 shadow-xl">
+                <p class="text-[#9dabb8] text-xs font-bold uppercase tracking-wider mb-1">Total Reach</p>
+                <p class="text-2xl font-outfit font-black text-white">
+                    {% set total_reach = namespace(value=0) %}
+                    {% for kol in influencers %}
+                        {% set total_reach.value = total_reach.value + (kol.followers_int or 0) %}
+                    {% endfor %}
+                    {% if total_reach.value > 1000000 %}
+                        {{ "%.1f"|format(total_reach.value / 1000000) }}M
+                    {% elif total_reach.value > 1000 %}
+                        {{ "%.1f"|format(total_reach.value / 1000) }}K
+                    {% else %}
+                        {{ total_reach.value }}
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="bg-surface-dark p-5 rounded-2xl border border-white/5 shadow-xl">
+                <p class="text-[#9dabb8] text-xs font-bold uppercase tracking-wider mb-1">Rata-Rata ER</p>
+                <p class="text-2xl font-outfit font-black text-purple-400">
+                    {% set total_er = namespace(value=0) %}
+                    {% set count_er = namespace(value=0) %}
+                    {% for kol in influencers %}
+                        {% if kol.endorsement_er_float %}
+                            {% set total_er.value = total_er.value + kol.endorsement_er_float %}
+                            {% set count_er.value = count_er.value + 1 %}
+                        {% else %}
+                            {% set er_val = kol.er|replace('%', '')|float %}
+                            {% set total_er.value = total_er.value + er_val %}
+                            {% set count_er.value = count_er.value + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if count_er.value > 0 %}
+                        {{ "%.1f"|format(total_er.value / count_er.value) }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="bg-surface-dark p-5 rounded-2xl border border-white/5 shadow-xl">
+                <p class="text-[#9dabb8] text-xs font-bold uppercase tracking-wider mb-1">Estimasi Views</p>
+                <p class="text-2xl font-outfit font-black text-blue-400">
+                    {% set total_views = namespace(value=0) %}
+                    {% set count_views = namespace(value=0) %}
+                    {% for kol in influencers %}
+                        {% set views_v = kol.endorsement_avg_views or kol.avg_views_int or 0 %}
+                        {% if views_v > 0 %}
+                            {% set total_views.value = total_views.value + views_v %}
+                            {% set count_views.value = count_views.value + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if count_views.value > 0 %}
+                        {% set avg_v = total_views.value / count_views.value %}
+                        {% if avg_v > 1000000 %}
+                            {{ "%.1f"|format(avg_v / 1000000) }}M
+                        {% elif avg_v > 1000 %}
+                            {{ "%.1f"|format(avg_v / 1000) }}K
+                        {% else %}
+                            {{ "%.0f"|format(avg_v) }}
+                        {% endif %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- Proposal List -->
+        <div class="space-y-6">
+            {% for kol in influencers %}
+            <div class="bg-surface-dark border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start shadow-xl">
+                
+                <!-- Avatar & Username -->
+                <div class="flex items-center gap-4 w-full md:w-1/4">
+                    <img src="{{ kol.image }}" 
+                        class="size-16 rounded-full border border-white/10 object-cover" 
+                        alt="{{ kol.name }}"
+                        onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ kol.name|urlencode }}'" />
+                    <div>
+                        <h3 class="font-outfit font-bold text-white text-lg leading-tight">{{ kol.name }}</h3>
+                        <a href="https://instagram.com/{{ kol.username }}" target="_blank" class="text-xs text-primary font-semibold hover:underline flex items-center gap-0.5 mt-1 no-print">
+                            @{{ kol.username }}
+                            <span class="material-symbols-outlined text-[12px] block">open_in_new</span>
+                        </a>
+                        <span class="text-xs text-[#9dabb8] print:block hidden">@{{ kol.username }}</span>
+                        <div class="inline-block mt-2 px-2.5 py-0.5 bg-white/5 border border-white/10 rounded-lg text-[10px] text-[#9dabb8] font-semibold">
+                            Instagram
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Metrics -->
+                <div class="grid grid-cols-3 gap-2 sm:gap-6 flex-1 w-full border-t border-b border-white/5 md:border-t-0 md:border-b-0 py-4 md:py-0">
+                    <div>
+                        <div class="text-[#9dabb8] text-[10px] font-bold uppercase tracking-wider mb-1">Followers</div>
+                        <div class="text-lg font-outfit font-bold text-white font-mono">{{ kol.followers }}</div>
+                    </div>
+                    <div>
+                        <div class="text-[#9dabb8] text-[10px] font-bold uppercase tracking-wider mb-1">ER Endorsement</div>
+                        <div class="text-lg font-outfit font-bold text-purple-400 font-mono">
+                            {{ kol.endorsement_er or kol.er }}
+                        </div>
+                        {% if kol.endorsement_posts_count %}
+                            <div class="text-[9px] text-[#9dabb8]">Dari {{ kol.endorsement_posts_count }} post sponsor</div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <div class="text-[#9dabb8] text-[10px] font-bold uppercase tracking-wider mb-1">Rerata Tayangan</div>
+                        <div class="text-lg font-outfit font-bold text-blue-400 font-mono">
+                            {% set v_val = kol.endorsement_avg_views_fmt or kol.avg_views or '0' %}
+                            {{ v_val }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Rates & CPV/CPE (Toggled) -->
+                <div class="rates-view w-full md:w-1/3 flex flex-col gap-3 pl-0 md:pl-6 border-l-0 md:border-l border-t border-t-white/5 md:border-t-0 pt-4 md:pt-0 mt-4 md:mt-0 border-white/5">
+                    <div class="text-[#9dabb8] text-[10px] font-bold uppercase tracking-wider">Rate Card & Estimasi Biaya</div>
+                    <div class="flex flex-col gap-1.5 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-[#9dabb8]">Reel Rate:</span>
+                            <span class="font-mono font-bold text-white">Rp{{ "{:,}".format(kol.rate_reel or 0) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-[#9dabb8]">Story Rate:</span>
+                            <span class="font-mono font-bold text-white">Rp{{ "{:,}".format(kol.rate_story or 0) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-[#9dabb8]">Feed Rate:</span>
+                            <span class="font-mono font-bold text-white">Rp{{ "{:,}".format(kol.rate_feed or 0) }}</span>
+                        </div>
+                        
+                        <!-- CPV/CPE calculations -->
+                        {% set views_val = kol.endorsement_avg_views or kol.avg_views_int or 0 %}
+                        {% set likes_val = kol.endorsement_avg_likes or 0 %}
+                        {% set comments_val = kol.endorsement_avg_comments or 0 %}
+                        {% if not likes_val %}
+                            {% set likes_val = kol.avg_likes|replace('K', '000')|replace('M', '000000')|float|int %}
+                        {% endif %}
+                        {% if not comments_val %}
+                            {% set comments_val = kol.avg_comments|int %}
+                        {% endif %}
+                        {% set eng_val = likes_val + comments_val %}
+                        
+                        <div class="border-t border-white/5 my-1.5 pt-1.5 flex justify-between text-xs">
+                            <span class="text-[#9dabb8]">Cost Per View (CPV):</span>
+                            <span class="font-mono font-bold text-green-400">
+                                {% if views_val > 0 and kol.rate_reel %}
+                                    Rp{{ "%.0f"|format(kol.rate_reel / views_val) }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-[#9dabb8]">Cost Per Engagement (CPE):</span>
+                            <span class="font-mono font-bold text-green-400">
+                                {% if eng_val > 0 and kol.rate_reel %}
+                                    Rp{{ "%.0f"|format(kol.rate_reel / eng_val) }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% else %}
+            <div class="bg-surface-dark border border-white/5 rounded-3xl p-12 text-center text-[#9dabb8]">
+                Belum ada KOL dalam proposal ini.
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <script>
+        function toggleRatesView(isVisible) {
+            const elements = document.querySelectorAll('.rates-view');
+            elements.forEach(el => {
+                if (isVisible) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
