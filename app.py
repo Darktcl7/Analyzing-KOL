@@ -276,11 +276,6 @@ def influencer_matches_filters(influencer, filters, raw_query, clean_query, nich
                 is_business = any(re.search(r'\b' + m + r'\b', bio_lower + ' ' + name_lower) for m in ['mua', 'makeup', 'salon', 'eyelash', 'nail', 'hotel', 'hostel', 'villa', 'penginapan', 'univ', 'universitas', 'kampus', 'boutique', 'butik', 'toko', 'store', 'jual', 'wisata', 'cafe', 'resto', 'tour', 'travel'])
                 
                 if not is_business:
-                    # Cek juga kalau dari apify tidak ada bio tapi dia disuntik secara paksa (contoh cheyuanita)
-                    if not bio_lower and influencer.get('followers_int', 0) >= 1000:
-                        niche_match = True
-                        break
-
                     # Gunakan regex word boundary agar 'host' tidak cocok dengan 'hostel'
                     professions = ['influencer', 'selebgram', 'public figure', 'content creator', 'digital creator', 'video creator', 'host', 'mc']
                     if any(re.search(r'\b' + kw + r'\b', bio_lower) for kw in professions):
@@ -289,7 +284,7 @@ def influencer_matches_filters(influencer, filters, raw_query, clean_query, nich
                         
                     # Jika followers > 10000 dan tipe Creator, otomatis dianggap influencer besar
                     try:
-                        followers = int(influencer.get('followers_int') or parse_followers_count(influencer.get('followers')))
+                        followers = int(influencer.get('followers', 0) or 0)
                     except (ValueError, TypeError):
                         followers = 0
                     if followers >= 10000 and influencer.get('account_type', '').lower() == 'creator':
