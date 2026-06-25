@@ -376,7 +376,7 @@
     <script>
       function goToPage(pageNumber) {
         document.getElementById('page_input').value = pageNumber;
-        document.getElementById('loading-overlay').classList.remove('hidden');
+        // loading overlay telah dihapus dari desain baru
         document.getElementById('search-form').submit();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
