@@ -114,131 +114,76 @@
       <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none"></div>
       <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-600/20 rounded-full blur-[80px] pointer-events-none"></div>
 
-      <!-- Platform & Search Row -->
-      <div class="flex flex-col lg:flex-row gap-4">
-
-        <!-- Platform Selector -->
-        <div class="bg-input-bg rounded-lg p-1 flex shrink-0 h-12 w-full lg:w-auto min-w-[240px]">
-          <label
-            class="flex-1 cursor-pointer flex items-center justify-center gap-2 rounded-md has-[:checked]:bg-[#111418] text-white transition-all">
-            <input {% if f.platform=='instagram' %}checked{% endif %} class="hidden" name="platform" type="radio"
-              value="instagram" />
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+      <!-- Platform Selector & Title -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div class="bg-[#111418] rounded-lg p-1 flex shrink-0 h-12 w-full md:w-auto min-w-[200px] border border-white/5">
+          <label class="flex-1 cursor-pointer flex items-center justify-center gap-2 rounded-md has-[:checked]:bg-[#1E2630] text-white transition-all shadow-sm">
+            <input {% if f.platform=='instagram' %}checked{% endif %} class="hidden" name="platform" type="radio" value="instagram" />
+            <svg class="w-5 h-5 text-[#E1306C]" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
             </svg>
-            <span class="text-sm font-bold">Instagram</span>
+            <span class="text-sm font-bold tracking-wide">Instagram</span>
           </label>
         </div>
-
-        <!-- Spacer -->
-        <div class="flex-1"></div>
-
-        <!-- Search Button -->
-        <button type="submit" id="search-btn" onclick="document.getElementById('page_input').value=1;"
-          class="bg-primary hover:bg-blue-600 text-white px-8 h-12 rounded-lg font-bold transition-all hover:shadow-lg hover:shadow-primary/20 w-full lg:w-auto">
-          Search
-        </button>
-      </div>
-
-      <!-- Loading Overlay (Hidden by default) -->
-      <div id="loading-overlay"
-        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center">
-        <div
-          class="bg-[#1E2630] p-8 rounded-2xl border border-[#3c4753] flex flex-col items-center max-w-md text-center shadow-2xl">
-          <div class="relative w-20 h-20 mb-6">
-            <div class="absolute inset-0 border-4 border-primary/30 rounded-full animate-ping"></div>
-            <div
-              class="absolute inset-0 border-4 border-t-primary border-r-primary border-b-transparent border-l-transparent rounded-full animate-spin">
-            </div>
-            <span
-              class="material-symbols-outlined absolute inset-0 flex items-center justify-center text-white text-3xl">smart_toy</span>
-          </div>
-          <h3 class="text-white text-xl font-bold mb-2">Agen Sedang Bekerja...</h3>
-          <p class="text-[#9dabb8] mb-6">Kami sedang mencari di database lokal & menyisir Instagram untuk menemukan KOL
-            terbaik.</p>
-
-          <div class="w-full bg-[#111418] rounded-full h-2 overflow-hidden">
-            <div class="h-full bg-primary animate-[wiggle_2s_infinite]" style="width: 60%"></div>
-          </div>
-          <p class="text-xs text-[#9dabb8] mt-2">Mohon tunggu hingga 1-2 menit jika data belum ada.</p>
+        <div class="hidden md:flex items-center gap-2 text-[#9dabb8] text-sm bg-black/20 px-4 py-2 rounded-full border border-white/5">
+          <span class="material-symbols-outlined text-primary text-[18px]">travel_explore</span>
+          <span class="font-medium">KOL Scout <span class="text-white/50">&bull;</span> Advanced Search</span>
         </div>
       </div>
 
-      <script>
-        document.querySelector('form').addEventListener('submit', function () {
-          const overlay = document.getElementById('loading-overlay');
-          overlay.classList.remove('hidden');
-          
-          const title = overlay.querySelector('h3');
-          const desc = overlay.querySelector('p');
-          title.textContent = "Mencari di Database Lokal...";
-          desc.textContent = "Sedang mengambil data KOL Malang terbaik untuk Anda.";
-        });
-      </script>
-
-      <!-- Filter Toggle Button (Mobile) -->
-      <button type="button" onclick="toggleFilters()" class="md:hidden flex items-center justify-between w-full text-[#9dabb8] text-sm font-bold pt-2 border-t border-white/5">
-        <span class="flex items-center gap-2">
-          <span class="material-symbols-outlined text-[18px]">tune</span>
-          Filter & Urutkan
-        </span>
-        <span class="material-symbols-outlined text-[18px] transition-transform" id="filter-chevron">expand_more</span>
-      </button>
-
       <!-- Advanced Filters Grid -->
-      <div id="filters-panel" class="hidden md:grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-6 relative z-10 pt-2 md:pt-4 border-t border-white/5 md:border-t">
-
+      <div id="filters-panel" class="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 relative z-10 mb-6">
+        
         <!-- Followers Min -->
-        <div class="flex flex-col gap-1">
-          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Min Followers</label>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider ml-1">Min Followers</label>
           <div class="relative group">
-            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[16px] md:text-[18px]">group</span>
-            <input name="min_followers" class="bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-8 md:pl-10 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
-              placeholder="Min" value="{{ f.min_fol or '' }}" />
+            <span class="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">group</span>
+            <input name="min_followers" class="bg-black/40 border border-white/10 rounded-xl pl-10 md:pl-12 pr-3 py-3 text-white text-sm w-full focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none shadow-inner"
+              placeholder="e.g. 5000" value="{{ f.min_fol or '' }}" />
           </div>
         </div>
 
         <!-- Followers Max -->
-        <div class="flex flex-col gap-1">
-          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Max Followers</label>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider ml-1">Max Followers</label>
           <div class="relative group">
-            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[16px] md:text-[18px]">group</span>
-            <input name="max_followers" class="bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-8 md:pl-10 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner"
-              placeholder="Max" value="{{ f.max_fol or '' }}" />
+            <span class="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[18px]">group</span>
+            <input name="max_followers" class="bg-black/40 border border-white/10 rounded-xl pl-10 md:pl-12 pr-3 py-3 text-white text-sm w-full focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none shadow-inner"
+              placeholder="e.g. 100000" value="{{ f.max_fol or '' }}" />
           </div>
         </div>
 
         <!-- Engagement Rate Filter -->
-        <div class="flex flex-col gap-1">
-          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Minimal ER</label>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider ml-1">Minimal ER</label>
           <div class="relative group">
-            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-green-400/80 group-focus-within:text-green-400 transition-colors material-symbols-outlined text-[16px] md:text-[18px]">trending_up</span>
-            <select name="er_rate" class="w-full bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-8 md:pl-10 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm appearance-none focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner">
+            <span class="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-green-400/80 group-focus-within:text-green-400 transition-colors material-symbols-outlined text-[18px]">trending_up</span>
+            <select name="er_rate" class="w-full bg-black/40 border border-white/10 rounded-xl pl-10 md:pl-12 pr-3 py-3 text-white text-sm appearance-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all outline-none shadow-inner cursor-pointer">
               <option value="0" {% if f.er_min=='0' %}selected{% endif %} class="bg-[#1E2630] py-2">Semua ER</option>
-              <option value="2" {% if f.er_min=='2' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 2%</option>
-              <option value="5" {% if f.er_min=='5' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 5%</option>
-              <option value="10" {% if f.er_min=='10' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 10%</option>
+              <option value="2" {% if f.er_min=='2' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 2% ER</option>
+              <option value="5" {% if f.er_min=='5' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 5% ER</option>
+              <option value="10" {% if f.er_min=='10' %}selected{% endif %} class="bg-[#1E2630] py-2"> > 10% ER</option>
             </select>
           </div>
         </div>
 
         <!-- Niche Tags Filter -->
-        <div class="flex flex-col gap-1">
-          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Niche</label>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider ml-1">Niche Target</label>
           <div class="relative group">
-            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-purple-400/80 group-focus-within:text-purple-400 font-bold transition-colors text-sm">#</span>
-            <input name="niche_tags" class="bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-7 md:pl-8 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm w-full focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none shadow-inner"
-              placeholder="kulinermalang, beauty..." value="{{ f.niche_tags or '' }}" />
+            <span class="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-purple-400/80 group-focus-within:text-purple-400 font-bold transition-colors text-[18px]">#</span>
+            <input name="niche_tags" class="bg-black/40 border border-white/10 rounded-xl pl-9 md:pl-10 pr-3 py-3 text-white text-sm w-full focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all outline-none shadow-inner"
+              placeholder="kulinermalang..." value="{{ f.niche_tags or '' }}" />
           </div>
         </div>
 
         <!-- Sort By Filter -->
-        <div class="flex flex-col gap-1 col-span-2 md:col-span-1">
-          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider">Urutkan</label>
+        <div class="flex flex-col gap-1.5 col-span-2 md:col-span-1">
+          <label class="text-[10px] md:text-xs font-bold text-[#9dabb8] uppercase tracking-wider ml-1">Urutkan</label>
           <div class="relative group">
-            <span class="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-blue-400/80 group-focus-within:text-blue-400 transition-colors material-symbols-outlined text-[16px] md:text-[18px]">sort</span>
-            <select name="sort_by" class="w-full bg-black/30 border border-white/5 rounded-lg md:rounded-xl pl-8 md:pl-10 pr-2 md:pr-3 py-2 md:py-3 text-white text-xs md:text-sm appearance-none focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none shadow-inner">
+            <span class="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-blue-400/80 group-focus-within:text-blue-400 transition-colors material-symbols-outlined text-[18px]">sort</span>
+            <select name="sort_by" class="w-full bg-black/40 border border-white/10 rounded-xl pl-10 md:pl-12 pr-3 py-3 text-white text-sm appearance-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all outline-none shadow-inner cursor-pointer">
               <option value="" {% if not f.sort_by %}selected{% endif %} class="bg-[#1E2630] py-2">Acak (Default)</option>
               <option value="followers_desc" {% if f.sort_by=='followers_desc' %}selected{% endif %} class="bg-[#1E2630] py-2">Followers ↓</option>
               <option value="followers_asc" {% if f.sort_by=='followers_asc' %}selected{% endif %} class="bg-[#1E2630] py-2">Followers ↑</option>
@@ -246,7 +191,15 @@
             </select>
           </div>
         </div>
+      </div>
 
+      <!-- Search Action Button -->
+      <div class="flex justify-center pt-6 border-t border-white/5">
+        <button type="submit" id="search-btn" onclick="document.getElementById('page_input').value=1;"
+          class="w-full md:w-2/3 lg:w-1/2 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-500 hover:to-blue-400 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:-translate-y-1 flex items-center justify-center gap-3">
+          <span class="material-symbols-outlined text-[24px]">person_search</span>
+          Mulai Pencarian KOL
+        </button>
       </div>
 
       <script>
