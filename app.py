@@ -110,6 +110,23 @@ def influencer_matches_filters(influencer, filters, raw_query, clean_query, nich
     province = (influencer.get('location_province') or '').lower().strip()
     detected = [d.lower() for d in influencer.get('detected_locations', [])]
 
+    # === FILTER MERCHANT (Toko/Bisnis/Restoran) ===
+    # Buang akun yang secara eksplisit adalah tempat usaha, bukan KOL/Influencer,
+    # kecuali user benar-benar mencari kata kunci spesifik toko.
+    import re
+    merchant_keywords = [
+        r'\bgrosir\b', r'\brepair\b', r'\bservice\b', r'\bgaransi\b', r'\bknalpot\b', r'\barloji\b',
+        r'\bjam tangan\b', r'\bbengkel\b', r'\bsupplier\b', r'ready\s?stock', r'frozen\s?food', 
+        r'\bcatering\b', r'jual beli', r'open order', r'close order', r'delivery order', 
+        r'\bgofood\b', r'\bgrabfood\b', r'\bshopeefood\b', r'setiap hari', r'pemesanan via',
+        r'menerima pesanan', r'melayani pesanan', r'\bwarung\b', r'\bkedai\b', r'\brestoran\b', 
+        r'\bresto\b', r'\bbuka\s+\d{1,2}', r'\bapotek\b', r'\bklinik\b', r'\bpenginapan\b', r'\bvilla\b'
+    ]
+    bio_name_str = f"{name} {username} {bio}"
+    for kw in merchant_keywords:
+        if re.search(kw, bio_name_str):
+            if not raw_query or not re.search(kw, raw_query.lower()):
+                return False
     if raw_query:
         text_match = any(
             query in field
