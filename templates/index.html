@@ -131,23 +131,12 @@
           </label>
         </div>
 
-        <!-- Search Input -->
-        <div
-          class="flex-1 flex bg-input-bg rounded-lg h-12 border border-transparent focus-within:border-primary/50 transition-all">
-          <div class="flex items-center pl-4 text-[#9dabb8]">
-            <span class="text-xl font-bold">#</span>
-          </div>
-          <input name="search_keyword"
-            class="bg-transparent border-none text-white w-full h-full px-3 focus:ring-0 focus:outline-none"
-            placeholder="Search keywords (e.g. food, beauty, travel)..." type="text" value="{{ f.query or '' }}" />
-          <div class="flex items-center pr-4 text-[#9dabb8]">
-            <span class="material-symbols-outlined">search</span>
-          </div>
-        </div>
+        <!-- Spacer -->
+        <div class="flex-1"></div>
 
         <!-- Search Button -->
         <button type="submit" id="search-btn" onclick="document.getElementById('page_input').value=1;"
-          class="bg-primary hover:bg-blue-600 text-white px-8 rounded-lg font-bold transition-all hover:shadow-lg hover:shadow-primary/20">
+          class="bg-primary hover:bg-blue-600 text-white px-8 h-12 rounded-lg font-bold transition-all hover:shadow-lg hover:shadow-primary/20 w-full lg:w-auto">
           Search
         </button>
       </div>
