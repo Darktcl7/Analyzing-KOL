@@ -41937,7 +41937,11 @@
         "detected_locations": [
             "Malang"
         ],
-        "followers_int": 5747
+        "followers_int": 5747,
+        "caption_hashtags": [
+            "influencermalang"
+        ],
+        "account_type": "Creator"
     },
     {
         "name": "Blyss Cafe & Eatery",
