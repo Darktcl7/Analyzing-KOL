@@ -127,6 +127,34 @@ def influencer_matches_filters(influencer, filters, raw_query, clean_query, nich
         if re.search(kw, bio_name_str):
             if not raw_query or not re.search(kw, raw_query.lower()):
                 return False
+
+    # === FILTER 1000 FOLLOWERS & NANO INFLUENCERS ===
+    try:
+        followers = int(influencer.get('followers_int', 0))
+    except (ValueError, TypeError):
+        try:
+            followers = int(influencer.get('followers', 0) or 0)
+        except (ValueError, TypeError):
+            followers = 0
+
+    is_nano_search = False
+    if niche_list:
+        niche_clean_list = [n.lower().replace('#', '').replace(' ', '').strip() for n in niche_list if n.strip()]
+        if 'nanoinfluencer' in niche_clean_list or 'nano' in niche_clean_list:
+            is_nano_search = True
+            
+    if raw_query and ('nano' in raw_query.lower()):
+        is_nano_search = True
+
+    if is_nano_search:
+        # Jika pencarian khusus Nano Influencer, wajib di bawah 1000
+        if followers >= 1000:
+            return False
+    else:
+        # Jika pencarian normal, wajib di atas atau sama dengan 1000
+        if followers < 1000:
+            return False
+
     if raw_query:
         text_match = any(
             query in field
