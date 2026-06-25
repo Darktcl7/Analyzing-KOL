@@ -110,6 +110,16 @@ def influencer_matches_filters(influencer, filters, raw_query, clean_query, nich
     province = (influencer.get('location_province') or '').lower().strip()
     detected = [d.lower() for d in influencer.get('detected_locations', [])]
 
+    # === FILTER LOKASI GLOBAL (MALANG RAYA SAJA) ===
+    allowed_locations = ['malang', 'batu', 'kepanjen', 'pejanten']
+    location_str = f"{location} {province} {' '.join(detected)} {bio} {name}".lower()
+    
+    import re
+    has_malang_location = any(re.search(r'\b' + loc + r'\b', location_str) for loc in allowed_locations)
+    
+    if not has_malang_location:
+        return False
+
     # === FILTER MERCHANT (Toko/Bisnis/Restoran) ===
     # Buang akun yang secara eksplisit adalah tempat usaha, bukan KOL/Influencer,
     # kecuali user benar-benar mencari kata kunci spesifik toko.
