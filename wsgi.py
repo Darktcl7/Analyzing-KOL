@@ -25,7 +25,7 @@ class ReverseProxied:
         return self.app(environ, start_response)
 
 # Apply middleware
-flask_app.wsgi_app = ReverseProxied(flask_app.wsgi_app, script_name='/kolproject')
+flask_app.wsgi_app = ReverseProxied(flask_app.wsgi_app, script_name='/kol_scout')
 
 # Expose app untuk gunicorn
 app = flask_app

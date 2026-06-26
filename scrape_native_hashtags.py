@@ -1,11 +1,11 @@
-﻿from apify_client import ApifyClient
+from apify_client import ApifyClient
 import json, re, os
 from datetime import datetime, timedelta
 
 APIFY_API_TOKEN = 'apify_api_KbFQZx7xrhTp1DQM2IcfdrUPTbvqvt41Tyeu'
 client = ApifyClient(APIFY_API_TOKEN)
 
-hashtags = ['influencermalang', 'malangcontentcreator']
+hashtags = ['kulinermalang']
 
 def check_malang(influencer):
     name = influencer.get('fullName', '').lower()
