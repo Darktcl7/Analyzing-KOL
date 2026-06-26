@@ -10,18 +10,19 @@ sys.stdout.reconfigure(encoding='utf-8')
 def main():
     print("Mencari Selebgram/Artis/Influencer Besar Malang melalui Google Search...")
     client = ApifyClient(APIFY_API_TOKEN)
-    
     queries = [
-        'site:instagram.com "selebgram malang"',
-        'site:instagram.com "artis malang"',
-        'site:instagram.com "influencer malang" "k followers" OR "m followers"',
-        'site:instagram.com "public figure" "malang"',
-        'site:instagram.com "content creator malang" "k followers"'
+        'site:instagram.com "#influencermalang"',
+        'site:instagram.com "#malangcontentcreator"',
+        'site:instagram.com/explore/tags/ "influencermalang"',
+        'site:instagram.com/explore/tags/ "malangcontentcreator"',
+        'site:instagram.com "influencer malang" after:2023-01-01',
+        'site:instagram.com "content creator malang" after:2023-01-01',
+        'site:instagram.com "#selebgrammalang"'
     ]
     
     run_input = {
         "queries": "\n".join(queries),
-        "maxPagesPerQuery": 2,
+        "maxPagesPerQuery": 5,
         "resultsPerPage": 100,
     }
     
@@ -72,7 +73,11 @@ def main():
             new_usernames = new_usernames[:70]  # Batasi agar tidak terlalu lama
             results = scraper.scrape_profiles_parallel(new_usernames)
             if results:
-                print(f"Berhasil menambahkan {len(results)} profil artis/selebgram baru ke database!")
+                # Save to JSON!
+                existing.extend(results)
+                with open('influencers.json', 'w', encoding='utf-8') as f:
+                    json.dump(existing, f, indent=2, ensure_ascii=False)
+                print(f"Berhasil menyimpan {len(results)} profil artis/selebgram baru ke influencers.json!")
             else:
                 print("Tidak ada profil baru yang berhasil didapat (mungkin karena filter area Malang atau hal lain).")
         else:

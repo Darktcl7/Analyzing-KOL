@@ -77,7 +77,7 @@ User=root
 Group=root
 WorkingDirectory=/var/www/kol_scouting
 Environment="PATH=/var/www/kol_scouting/venv/bin"
-ExecStart=/var/www/kol_scouting/venv/bin/gunicorn --workers 2 --bind 127.0.0.1:5001 wsgi:app
+ExecStart=/var/www/kol_scouting/venv/bin/gunicorn --workers 2 --bind 0.0.0.0:8080 wsgi:app
 Restart=always
 
 [Install]

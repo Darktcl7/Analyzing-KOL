@@ -12,14 +12,16 @@ class ReverseProxied:
         self.script_name = script_name
 
     def __call__(self, environ, start_response):
-        # Jika request datang dari proxy dengan path /kolproject
         script_name = self.script_name
         path_info = environ.get('PATH_INFO', '')
         
+        # Jika request datang dari proxy dengan path /kolproject, strip prefix-nya dari PATH_INFO
+        if path_info.startswith(script_name):
+            environ['PATH_INFO'] = path_info[len(script_name):]
+            
         # Set SCRIPT_NAME agar Flask generate URL yang benar
         environ['SCRIPT_NAME'] = script_name
         
-        # Jangan strip path, biarkan Flask handle dari root
         return self.app(environ, start_response)
 
 # Apply middleware
