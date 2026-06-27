@@ -131,6 +131,16 @@
         </div>
       </div>
 
+      <!-- Main Search Keyword -->
+      <div class="relative z-10 mb-2">
+        <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider ml-1 mb-1.5 block">Cari Nama KOL / Username</label>
+        <div class="relative group">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#9dabb8] group-focus-within:text-primary transition-colors material-symbols-outlined text-[20px]">search</span>
+          <input name="search_keyword" class="bg-black/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white text-sm md:text-base w-full focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none shadow-inner"
+            placeholder="Ketik nama asli atau @username..." value="{{ f.query or '' }}" />
+        </div>
+      </div>
+
       <!-- Advanced Filters Grid -->
       <div id="filters-panel" class="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 relative z-10 mb-6">
         

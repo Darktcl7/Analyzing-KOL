@@ -234,36 +234,47 @@ def influencer_matches_filters(influencer, filters, raw_query, clean_query, nich
         for niche in niche_list:
             niche_raw_lower = niche.strip().lower().replace('#', '')
             niche_clean = niche_raw_lower.replace(' ', '')
-            if not niche_clean:
-                continue
-
-            # 1. Cari di caption_hashtags (substring match bebas untuk hashtag)
-            if any(niche_clean in h for h in caption_hashtags):
-                niche_match = True
-                break
-                
-            # 2. Cari langsung di Bio (harus exact word match agar tidak salah target)
-            bio_lower = influencer.get('bio', '').lower()
-            if re.search(r'\b' + re.escape(niche_raw_lower) + r'\b', bio_lower):
-                niche_match = True
-                break
-            # Coba juga format tanpa spasi (misal bio nulis 'malangfoodies')
-            if niche_clean != niche_raw_lower and re.search(r'\b' + re.escape(niche_clean) + r'\b', bio_lower):
-                niche_match = True
-                break
+            words = niche_raw_lower.split()
             
-            # Jika user memasukkan spasi, misal "kuliner malang", maka pisah per kata 
-            # dan pastikan SEMUA kata ada di dalam daftar hashtag
-            if ' ' in niche.strip():
-                words = niche.strip().lower().replace('#', '').split()
-                # Cek apakah setiap kata ada di setidaknya satu hashtag
-                all_words_found = True
-                for w in words:
-                    if not any(w in h for h in caption_hashtags):
-                        all_words_found = False
-                        break
-            # 1. Cari di caption_hashtags
-            if any(niche_clean in h for h in caption_hashtags):
+            if not words:
+                continue
+                
+            # Cek di Username atau Name
+            name_user_str = (influencer.get('username', '') + ' ' + influencer.get('name', '')).lower()
+            name_user_nospace = name_user_str.replace(' ', '')
+            
+            # Cek di Bio
+            bio_lower = influencer.get('bio', '').lower()
+            bio_nospace = bio_lower.replace(' ', '')
+            
+            # Jika user mengetikkan tanpa spasi (misal "kulinermalang"), 
+            # cocokkan juga dengan string target yang sudah dihilangkan spasinya
+            if len(words) == 1:
+                w = words[0]
+                if w in name_user_str or w in name_user_nospace:
+                    niche_match = True
+                    break
+                if w in bio_lower or w in bio_nospace:
+                    niche_match = True
+                    break
+            else:
+                # Multi-word match
+                if all(w in name_user_str for w in words):
+                    niche_match = True
+                    break
+                if all(w in bio_lower for w in words):
+                    niche_match = True
+                    break
+                
+            # Cek di Hashtags
+            # Pastikan semua kata ditemukan di dalam daftar hashtag
+            all_words_found = True
+            for w in words:
+                if not any(w in h for h in caption_hashtags):
+                    all_words_found = False
+                    break
+            
+            if all_words_found:
                 niche_match = True
                 break
                 

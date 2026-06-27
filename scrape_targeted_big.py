@@ -87,6 +87,14 @@ TARGET_USERNAMES = [
     "ceritakulinermalang",
     "malangfoodie",
     "jajanmalangbatu",
+    # === TAMBAHAN DARI PENCARIAN IG (KULINER MALANG) ===
+    "malangsukajajan", "kulinermalang88", "kulinermalangraya", "airayukimom", "mindonimalang",
+    "preksumalang", "infokulinermalang", "kulineran_malang_", "kulinermalangcom", "kulinermalang_",
+    "rujakhayday", "kulinerenakmalang", "badogersmalang", "kulinermhsmlg", "mamdimalang",
+    "kulinermalang.city", "malang.kulinerr", "kulinerhalalmalang", "warunglox", "laper_mager",
+    "kopiletek", "kulinermalangg", "infokulinermalangan", "infokulinermlg", "voodiesid",
+    "kuliner.malangraya", "kuliner_malang", "duniakulinermalang", "kakilimamalang", "katalogmalang",
+    "kulinermalangid", "depotkayutangan"
 ]
 
 def get_existing_usernames():
@@ -208,8 +216,8 @@ def process_profile(profile, posts_to_scan=30):
         "following": profile.get('followsCount', 0),
         "account_type": acc_type,
         "category": category,
-        "is_verified": profile.get('isVerified', False),
-        "profile_pic": avatar,
+        "is_verified": profile.get('verified') or profile.get('isVerified') or False,
+        "image": avatar,
         "location": loc.get('location', 'Malang'),
         "location_province": loc.get('province', 'Jawa Timur'),
         "detected_locations": loc.get('detected_locations', []),
@@ -219,14 +227,15 @@ def process_profile(profile, posts_to_scan=30):
         "avg_likes": avg_likes,
         "avg_comments": avg_comments,
         "avg_views": avg_views,
-        "engagement_rate": round(er, 2),
+        "er": f"{er:.1f}%",
+        "er_float": round(er, 2),
         "latest_post_date": latest_post_date.strftime('%Y-%m-%d') if latest_post_date else None,
         "endorsement_count": endo_count,
         "endorsement_avg_likes": endo_avg_likes,
         "endorsement_avg_comments": endo_avg_comments,
         "endorsement_avg_views": endo_avg_views,
         "endorsement_er": round(endo_er, 2),
-        "niche_tags": list(all_hashtags)[:20],
+        "caption_hashtags": list(all_hashtags)[:20],
         "external_url": profile.get('externalUrl', ''),
     }
 
