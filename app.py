@@ -1359,6 +1359,9 @@ def refresh_influencer(username):
         return redirect(url_for('login', next=request.path))
         
     try:
+        if not SCRAPER_AVAILABLE:
+            return "Gagal memperbarui profil. Modul Apify belum terinstal (pip install apify-client).", 500
+            
         scraper = ApifyInstagramScraper()
         new_data = scraper.scrape_single_profile(username)
         if new_data:
