@@ -1,0 +1,155 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard Influencer - KOL Scout{% endblock %}
+
+{% block content %}
+<div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6">
+
+  <!-- Welcome Banner -->
+  <div class="relative bg-[#1E2630]/60 backdrop-blur-xl rounded-3xl border border-white/10 p-6 md:p-8 overflow-hidden shadow-2xl flex items-center justify-between">
+    <div class="absolute -top-32 -left-32 w-64 h-64 bg-purple-600/20 rounded-full blur-[80px] pointer-events-none"></div>
+    <div class="relative z-10">
+      <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Halo, @{{ ig_username }}! 👋</h1>
+      <p class="text-[#9dabb8]">Selamat datang di Workspace khusus KOL. Kelola harga jasa dan pekerjaan Anda di sini.</p>
+    </div>
+    <div class="hidden md:flex relative z-10 w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-white/10 items-center justify-center">
+      <span class="material-symbols-outlined text-[32px] text-purple-400">campaign</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <!-- LEFT COLUMN: Rate Card -->
+    <div class="lg:col-span-1 space-y-6">
+      <div class="bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-xl relative overflow-hidden">
+        <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-purple-400">payments</span>
+          Atur Rate Card Anda
+        </h2>
+        <p class="text-sm text-[#9dabb8] mb-6">Pastikan harga terbaru selalu diupdate agar Agency memberikan tawaran yang pas.</p>
+        
+        <form id="rateCardForm" class="space-y-4">
+          <div>
+            <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider mb-2 block">Harga Instagram Reel (Rp)</label>
+            <input type="number" id="rateReel" value="{{ profile.rate_reel }}"
+              class="bg-black/30 border border-white/5 rounded-xl px-4 py-3 text-white text-sm w-full focus:ring-1 focus:ring-purple-400 focus:border-purple-400 transition-all outline-none" />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider mb-2 block">Harga Instagram Story (Rp)</label>
+            <input type="number" id="rateStory" value="{{ profile.rate_story }}"
+              class="bg-black/30 border border-white/5 rounded-xl px-4 py-3 text-white text-sm w-full focus:ring-1 focus:ring-purple-400 focus:border-purple-400 transition-all outline-none" />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-[#9dabb8] uppercase tracking-wider mb-2 block">Harga Instagram Feed (Rp)</label>
+            <input type="number" id="rateFeed" value="{{ profile.rate_feed }}"
+              class="bg-black/30 border border-white/5 rounded-xl px-4 py-3 text-white text-sm w-full focus:ring-1 focus:ring-purple-400 focus:border-purple-400 transition-all outline-none" />
+          </div>
+          <button type="submit"
+            class="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-600 hover:to-purple-500 text-white py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-purple-500/30 flex items-center justify-center gap-2 mt-4">
+            <span class="material-symbols-outlined text-[18px]">save</span>
+            Simpan Rate Card
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Job Proposals -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-xl relative overflow-hidden h-full">
+        <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-blue-400">work</span>
+          Papan Kerja (Tawaran Kampanye)
+        </h2>
+        
+        {% if campaigns %}
+          <div class="space-y-4">
+            {% for job in campaigns %}
+            <div class="bg-black/30 border border-white/5 rounded-xl p-5 hover:border-white/10 transition-colors">
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h3 class="text-white font-bold text-lg">{{ job.campaign_name }}</h3>
+                  <p class="text-sm text-[#9dabb8]">Oleh: <span class="text-white font-medium">{{ job.agency_name }}</span></p>
+                </div>
+                <span class="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-xs font-bold border border-blue-500/20">
+                  {{ job.status }}
+                </span>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="bg-[#1E2630] rounded-lg p-3 border border-white/5">
+                  <span class="text-xs text-[#9dabb8] block mb-1">Brief Details</span>
+                  <p class="text-sm text-white">{{ job.brief_details or 'Belum ada brief detail' }}</p>
+                </div>
+                <div class="bg-[#1E2630] rounded-lg p-3 border border-white/5">
+                  <span class="text-xs text-[#9dabb8] block mb-1">Tenggat Waktu (Due Date)</span>
+                  <p class="text-sm text-white flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px] text-yellow-400">event</span>
+                    {{ job.brief_due_date or 'Belum ditentukan' }}
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex gap-2">
+                <button class="px-4 py-2 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-lg text-sm font-bold transition-colors">
+                  Terima Tawaran
+                </button>
+                <button class="px-4 py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg text-sm font-bold transition-colors">
+                  Tolak
+                </button>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="flex flex-col items-center justify-center py-16 text-center">
+            <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-[32px] text-[#9dabb8]">inbox</span>
+            </div>
+            <p class="text-[#9dabb8] mb-1">Belum ada tawaran kampanye saat ini.</p>
+            <p class="text-sm text-[#5a6a7a]">Pastikan Rate Card Anda diupdate agar dilirik Agency.</p>
+          </div>
+        {% endif %}
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('rateCardForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Menyimpan...';
+  
+  const data = {
+    rate_reel: parseInt(document.getElementById('rateReel').value) || 0,
+    rate_story: parseInt(document.getElementById('rateStory').value) || 0,
+    rate_feed: parseInt(document.getElementById('rateFeed').value) || 0
+  };
+  
+  try {
+    const res = await fetch('/kol/update_rates', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if(result.status === 'success') {
+      btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span> Berhasil Tersimpan!';
+      btn.classList.add('from-green-500', 'to-emerald-600');
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.classList.remove('from-green-500', 'to-emerald-600');
+      }, 2000);
+    } else {
+      alert('Gagal menyimpan: ' + (result.message || 'Error'));
+      btn.innerHTML = originalText;
+    }
+  } catch(err) {
+    alert('Terjadi kesalahan jaringan.');
+    btn.innerHTML = originalText;
+  }
+});
+</script>
+{% endblock %}

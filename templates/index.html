@@ -102,13 +102,12 @@
         </span>
         Malang Exclusive
       </div>
-      <h1 class="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-[#9dabb8] text-2xl md:text-5xl font-black tracking-tight drop-shadow-sm">Malang KOL Scout</h1>
-      <p class="text-[#9dabb8] text-sm md:text-lg font-light">Pusat Database Influencer & Lifestyle Malang Raya.</p>
+      <h1 class="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-[#9dabb8] text-2xl md:text-4xl font-black tracking-tight drop-shadow-sm">Malang KOL Scout</h1>
+      <p class="text-[#9dabb8] text-sm md:text-base font-light mt-1">Pusat Database Influencer & Lifestyle Malang Raya.</p>
     </div>
 
-    <!-- Unified Search & Filter Form -->
     <form method="GET" action="/" id="search-form"
-      class="relative bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-4 md:p-8 shadow-2xl flex flex-col gap-4 md:gap-6 overflow-hidden">
+      class="relative bg-[#1E2630]/60 backdrop-blur-xl rounded-2xl border border-white/10 p-4 md:p-5 shadow-2xl flex flex-col gap-3 md:gap-4 overflow-hidden">
       <input type="hidden" name="page" id="page_input" value="{{ pagination.page if pagination else 1 }}" />
       <!-- Glow effect -->
       <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none"></div>
@@ -204,10 +203,9 @@
       </div>
 
       <!-- Search Action Button -->
-      <div class="flex justify-center pt-6 border-t border-white/5">
-        <button type="submit" id="search-btn" onclick="document.getElementById('page_input').value=1;"
-          class="w-full md:w-2/3 lg:w-1/2 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-500 hover:to-blue-400 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:-translate-y-1 flex items-center justify-center gap-3">
-          <span class="material-symbols-outlined text-[24px]">person_search</span>
+      <div class="flex justify-center pt-4 border-t border-white/5">
+        <button type="submit" id="search-btn" onclick="document.getElementById('page_input').value=1;" class="w-full md:w-2/3 lg:w-1/2 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-500 hover:to-blue-400 text-white px-8 py-3 rounded-xl font-bold text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:-translate-y-1 flex items-center justify-center gap-3">
+          <span class="material-symbols-outlined text-[20px]">person_search</span>
           Mulai Pencarian KOL
         </button>
       </div>

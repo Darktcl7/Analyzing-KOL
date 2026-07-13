@@ -559,13 +559,39 @@ def register():
             return render_template('register.html', error='Konfirmasi password tidak cocok.', username_val=username)
             
         import database
-        user_id = database.create_user(username, password)
+        user_id = database.create_user(username, password, role='agency')
         if user_id:
             return render_template('login.html', success='Pendaftaran berhasil! Silakan masuk dengan akun Anda.', username_val=username)
         else:
             return render_template('register.html', error='Username sudah digunakan.', username_val=username)
             
     return render_template('register.html')
+
+@app.route('/register_kol', methods=['GET', 'POST'])
+def register_kol():
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '')
+        confirm_password = request.form.get('confirm_password', '')
+        ig_username = request.form.get('ig_username', '').strip()
+        
+        if not username or not password or not ig_username:
+            return render_template('register_kol.html', error='Semua kolom wajib diisi.', username_val=username, ig_val=ig_username)
+            
+        if len(password) < 6:
+            return render_template('register_kol.html', error='Password minimal harus 6 karakter.', username_val=username, ig_val=ig_username)
+            
+        if password != confirm_password:
+            return render_template('register_kol.html', error='Konfirmasi password tidak cocok.', username_val=username, ig_val=ig_username)
+            
+        import database
+        user_id = database.create_user(username, password, role='kol', ig_username=ig_username)
+        if user_id:
+            return render_template('login.html', success='Pendaftaran Influencer berhasil! Silakan masuk.', username_val=username)
+        else:
+            return render_template('register_kol.html', error='Username sudah digunakan.', username_val=username, ig_val=ig_username)
+            
+    return render_template('register_kol.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -586,6 +612,12 @@ def login():
         if user:
             session['user_id'] = user['id']
             session['username'] = user['username']
+            session['role'] = user.get('role', 'agency')
+            session['ig_username'] = user.get('ig_username', '')
+            
+            if session['role'] == 'kol':
+                return redirect(next_url or url_for('kol_dashboard'))
+                
             # Migrate any session-based list items
             if 'my_list' in session and session['my_list']:
                 lists = database.get_user_lists(user['id'])
@@ -605,6 +637,37 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('home'))
+
+@app.route('/kol_dashboard')
+def kol_dashboard():
+    if 'user_id' not in session or session.get('role') != 'kol':
+        return redirect(url_for('login'))
+        
+    import database
+    user_id = session['user_id']
+    ig_username = session.get('ig_username', '')
+    
+    # Fetch rate card profile
+    profile = database.get_kol_profile(user_id)
+    
+    # Fetch campaign invitations targeting this KOL's IG username
+    campaigns = database.get_kol_campaigns(ig_username)
+    
+    return render_template('kol_dashboard.html', profile=profile, campaigns=campaigns, ig_username=ig_username)
+
+@app.route('/kol/update_rates', methods=['POST'])
+def kol_update_rates():
+    if 'user_id' not in session or session.get('role') != 'kol':
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
+        
+    data = request.get_json() or {}
+    rate_reel = data.get('rate_reel', 0)
+    rate_story = data.get('rate_story', 0)
+    rate_feed = data.get('rate_feed', 0)
+    
+    import database
+    database.update_kol_profile(session['user_id'], rate_reel, rate_story, rate_feed)
+    return jsonify({'status': 'success'})
 
 @app.route('/add_to_list/<username>')
 def add_to_list(username):

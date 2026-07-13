@@ -56,6 +56,11 @@
             box-sizing: border-box;
         }
 
+        /* Scale down the entire UI gracefully across all monitors */
+        html {
+            font-size: 14px; /* Default is 16px, this makes everything ~12% smaller and sleeker */
+        }
+
         body {
             overflow: hidden;
         }
@@ -89,8 +94,8 @@
     </style>
 </head>
 
-<body class="bg-[#0B0F15] text-white font-display overflow-hidden">
-    <div class="relative flex h-screen w-full overflow-hidden">
+<body class="bg-[#05070a] text-white font-display overflow-hidden flex justify-center items-center h-screen">
+    <div class="relative flex h-screen w-full max-w-[1440px] bg-[#0B0F15] overflow-hidden border-x border-white/5 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
 
         <!-- Sidebar -->
         <div class="hidden lg:flex w-[280px] flex-col border-r border-white/5 bg-[#0D1219]/90 backdrop-blur-md z-20">
@@ -107,12 +112,23 @@
                         </div>
                         <div class="flex flex-col">
                             <h1 class="text-white text-base font-bold">KOL Scout</h1>
+                            {% if session.get('role') == 'kol' %}
+                            <p class="text-purple-400 text-xs font-medium">Influencer Account</p>
+                            {% else %}
                             <p class="text-[#9dabb8] text-xs font-medium">Pro Plan • Agency</p>
+                            {% endif %}
                         </div>
                     </div>
 
                     <!-- Navigation Menu -->
                     <div class="flex flex-col gap-2">
+                        {% if session.get('role') == 'kol' %}
+                        <a href="/kol_dashboard"
+                            class="flex items-center gap-3 px-3 py-2 {% if request.path == '/kol_dashboard' %}bg-purple-500/20 text-purple-400{% else %}text-[#9dabb8] hover:text-white hover:bg-[#293038]{% endif %} rounded-lg transition-all">
+                            <span class="material-symbols-outlined {% if request.path == '/kol_dashboard' %}fill{% endif %}">dashboard</span>
+                            <p class="text-sm font-medium">Dashboard KOL</p>
+                        </a>
+                        {% else %}
                         <a href="/"
                             class="flex items-center gap-3 px-3 py-2 {% if request.path == '/' %}bg-primary/20 text-primary{% else %}text-[#9dabb8] hover:text-white hover:bg-[#293038]{% endif %} rounded-lg transition-all">
                             <span
@@ -126,7 +142,7 @@
                                 class="material-symbols-outlined {% if request.path == '/saved-lists' %}fill{% endif %}">bookmarks</span>
                             <p class="text-sm font-medium">Saved Lists</p>
                         </a>
-
+                        {% endif %}
                     </div>
                 </div>
 
@@ -179,6 +195,12 @@
 
         <!-- Mobile Bottom Navigation -->
         <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-[#0D1219]/95 backdrop-blur-lg border-t border-white/10 z-50 flex items-center justify-around px-2 py-2">
+            {% if session.get('role') == 'kol' %}
+            <a href="/kol_dashboard" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg {% if request.path == '/kol_dashboard' %}text-purple-400{% else %}text-[#9dabb8]{% endif %} transition-all">
+                <span class="material-symbols-outlined text-[22px] {% if request.path == '/kol_dashboard' %}fill{% endif %}">dashboard</span>
+                <span class="text-[10px] font-semibold">Dashboard</span>
+            </a>
+            {% else %}
             <a href="/" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg {% if request.path == '/' %}text-primary{% else %}text-[#9dabb8]{% endif %} transition-all">
                 <span class="material-symbols-outlined text-[22px] {% if request.path == '/' %}fill{% endif %}">search</span>
                 <span class="text-[10px] font-semibold">Discovery</span>
@@ -187,6 +209,7 @@
                 <span class="material-symbols-outlined text-[22px] {% if request.path == '/saved-lists' %}fill{% endif %}">bookmarks</span>
                 <span class="text-[10px] font-semibold">Saved</span>
             </a>
+            {% endif %}
             {% if session.get('user_id') %}
             <a href="/logout" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-[#9dabb8] transition-all">
                 <div class="h-6 w-6 rounded-full bg-gradient-to-tr from-primary to-blue-500 flex items-center justify-center font-bold text-white text-[10px]">

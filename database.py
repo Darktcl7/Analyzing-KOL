@@ -58,9 +58,19 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password_hash TEXT NOT NULL,
+                role TEXT DEFAULT 'agency',
+                ig_username TEXT DEFAULT '',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        
+        # Migrations for users table (if upgrading from older version)
+        cursor.execute("PRAGMA table_info(users)")
+        users_cols = [row['name'] for row in cursor.fetchall()]
+        if 'role' not in users_cols:
+            cursor.execute("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'agency'")
+        if 'ig_username' not in users_cols:
+            cursor.execute("ALTER TABLE users ADD COLUMN ig_username TEXT DEFAULT ''")
         
         # Create Saved Lists table
         cursor.execute("""
@@ -69,6 +79,18 @@ def init_db():
                 user_id INTEGER NOT NULL,
                 name TEXT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            )
+        """)
+        
+        # Create KOL Profiles table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS kol_profiles (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL UNIQUE,
+                rate_reel INTEGER DEFAULT 0,
+                rate_story INTEGER DEFAULT 0,
+                rate_feed INTEGER DEFAULT 0,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             )
         """)
@@ -133,7 +155,7 @@ def init_db():
         if not cursor.fetchone():
             admin_hash = generate_password_hash("admin123")
             cursor.execute(
-                "INSERT INTO users (id, username, password_hash) VALUES (9999, 'admin', ?)",
+                "INSERT INTO users (id, username, password_hash, role) VALUES (9999, 'admin', ?, 'admin')",
                 (admin_hash,)
             )
             # Also create default list for admin
@@ -145,7 +167,7 @@ def init_db():
 
 
 @with_retry()
-def create_user(username, password):
+def create_user(username, password, role='agency', ig_username=''):
     username = username.strip()
     if not username or not password:
         return None
@@ -155,15 +177,24 @@ def create_user(username, password):
         try:
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO users (username, password_hash) VALUES (?, ?)",
-                (username, password_hash)
+                "INSERT INTO users (username, password_hash, role, ig_username) VALUES (?, ?, ?, ?)",
+                (username, password_hash, role, ig_username.strip().lower())
             )
             user_id = cursor.lastrowid
-            # Automatically create a default list for the new user
-            cursor.execute(
-                "INSERT INTO saved_lists (user_id, name) VALUES (?, ?)",
-                (user_id, "Daftar Utama")
-            )
+            
+            if role == 'agency' or role == 'admin':
+                # Automatically create a default list for agency
+                cursor.execute(
+                    "INSERT INTO saved_lists (user_id, name) VALUES (?, ?)",
+                    (user_id, "Daftar Utama")
+                )
+            elif role == 'kol':
+                # Automatically create a kol profile
+                cursor.execute(
+                    "INSERT INTO kol_profiles (user_id) VALUES (?)",
+                    (user_id,)
+                )
+                
             conn.commit()
             return user_id
         except sqlite3.IntegrityError:
@@ -179,7 +210,9 @@ def verify_user(username, password):
         if user and check_password_hash(user['password_hash'], password):
             return {
                 'id': user['id'],
-                'username': user['username']
+                'username': user['username'],
+                'role': user['role'] if 'role' in user.keys() else 'agency',
+                'ig_username': user['ig_username'] if 'ig_username' in user.keys() else ''
             }
         return None
 
@@ -401,3 +434,51 @@ def remove_tracked_post(post_id):
         cursor.execute("DELETE FROM tracked_posts WHERE id = ?", (post_id,))
         conn.commit()
         return cursor.rowcount > 0
+
+
+@with_retry()
+def get_kol_profile(user_id):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM kol_profiles WHERE user_id = ?", (user_id,))
+        profile = cursor.fetchone()
+        if profile:
+            return dict(profile)
+        return {'rate_reel': 0, 'rate_story': 0, 'rate_feed': 0}
+
+
+@with_retry()
+def update_kol_profile(user_id, rate_reel, rate_story, rate_feed):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE kol_profiles 
+            SET rate_reel = ?, rate_story = ?, rate_feed = ? 
+            WHERE user_id = ?
+        """, (int(rate_reel or 0), int(rate_story or 0), int(rate_feed or 0), user_id))
+        if cursor.rowcount == 0:
+            cursor.execute("""
+                INSERT INTO kol_profiles (user_id, rate_reel, rate_story, rate_feed)
+                VALUES (?, ?, ?, ?)
+            """, (user_id, int(rate_reel or 0), int(rate_story or 0), int(rate_feed or 0)))
+        conn.commit()
+        return True
+
+
+@with_retry()
+def get_kol_campaigns(ig_username):
+    if not ig_username:
+        return []
+    with get_db() as conn:
+        cursor = conn.cursor()
+        # Get list items that match the IG username, along with the agency name (list owner)
+        cursor.execute("""
+            SELECT li.*, sl.name as campaign_name, u.username as agency_name
+            FROM list_items li
+            JOIN saved_lists sl ON li.list_id = sl.id
+            JOIN users u ON sl.user_id = u.id
+            WHERE li.username = ?
+            ORDER BY li.created_at DESC
+        """, (ig_username,))
+        return [dict(row) for row in cursor.fetchall()]
+
